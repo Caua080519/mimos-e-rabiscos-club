@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Minha conta (protótipo) | Mimos e Rabiscos Club</title>
+  <meta name="theme-color" content="#dceffb">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/lapis.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/panel.css">
+</head>
+<body class="account">
+<header class="header">
+  <div class="container header__in">
+    <a class="logo" href="index.html" aria-label="Voltar para o início">
+      <img src="assets/lapis.svg" alt="" width="26" height="38">
+      <span>Mimos e Rabiscos <em>Club</em></span>
+    </a>
+    <a class="btn btn--ghost btn--small" href="index.html">Voltar ao site</a>
+  </div>
+</header>
+
+<main class="container acc">
+  <div class="proto-banner" role="note">
+    <strong>Protótipo.</strong> Esta área ainda não tem login nem servidor. Os dados abaixo são <strong>fictícios (demonstração)</strong> e os botões de alterar, pagar e cancelar <strong>não fazem nada de verdade</strong>.
+  </div>
+
+  <div class="acc__top">
+    <div>
+      <p class="eyebrow">Área do cliente</p>
+      <h1 class="h1-s" id="acc-hello">Olá!</h1>
+    </div>
+    <label class="acc__who">Ver como
+      <select id="acc-who"></select>
+    </label>
+  </div>
+
+  <div class="acc__grid" id="acc-grid" aria-live="polite"></div>
+</main>
+
+<dialog class="modal" id="modal">
+  <form method="dialog">
+    <img src="assets/lapis.svg" alt="" width="40" height="60">
+    <h2 id="modal-title">Protótipo</h2>
+    <p id="modal-text"></p>
+    <button class="btn" value="ok">Entendi</button>
+  </form>
+</dialog>
+
+<footer class="footer">
+  <div class="container"><small>© <span id="year"></span> Mimos e Rabiscos. Todos os direitos reservados.</small></div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/mock/demo-data.js"></script>
+<script src="js/services/api.js"></script>
+<script src="js/conta.js"></script>
+</body>
+</html>
