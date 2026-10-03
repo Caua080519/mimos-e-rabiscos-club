@@ -342,6 +342,16 @@ const API = (function () {
           const { error } = await sb.rpc("admin_set_current_theme", { p_id: id });
           return error ? fail(error) : { ok: true };
         },
+        // Envia a imagem do tema (arte criada pelo painel ou foto do dono) e devolve o endereço público dela
+        async uploadArt(blob, ext) {
+          if (!LIVE) return notReady("Enviar imagem");
+          const mime = { svg: "image/svg+xml", jpg: "image/jpeg" }[ext];
+          if (!mime) return { ok: false, message: "Formato de imagem não aceito." };
+          const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+          const up = await sb.storage.from("theme-art").upload(path, blob, { contentType: mime, upsert: false });
+          if (up.error) return fail(up.error);
+          return { ok: true, url: sb.storage.from("theme-art").getPublicUrl(path).data.publicUrl };
+        },
         async currentId() {
           if (!LIVE) return lsGet("mrc_theme_current", "");
           const { data } = await sb.from("themes").select("id").eq("is_current", true).maybeSingle();

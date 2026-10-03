@@ -315,10 +315,56 @@
     if (!LIVE && !t.id) t.id = "t" + Date.now();
     const r = await API.admin.themes.save(t);
     if (!r.ok) return themeErr(r.message);
-    form.reset(); form.elements.id.value = "";
+    form.reset(); form.elements.id.value = ""; showArt(""); artMsg("");
     await load();
   });
-  $("theme-reset").addEventListener("click", () => { form.reset(); form.elements.id.value = ""; themeErr(""); });
+  /* ---------- Imagem do tema: criar arte pelo nome/descrição ou enviar a própria ---------- */
+  const artMsg = (m, good) => { const el = $("art-msg"); el.textContent = m; el.hidden = !m; el.style.color = good ? "#25683b" : ""; };
+  const showArt = (url) => { const im = $("art-preview"); if (url && safeImg(url)) { im.src = url; im.hidden = false; } else im.hidden = true; };
+  $("art-url").addEventListener("input", () => showArt($("art-url").value));
+
+  $("art-gen").addEventListener("click", async () => {
+    const name = form.elements.name.value.trim();
+    if (!name) return artMsg("Escreva o nome do tema primeiro (por exemplo: Jardim Encantado).");
+    const svg = ThemeArt.svg(name, form.elements.description.value);
+    // prévia imediata, mesmo antes de enviar
+    const im = $("art-preview"); im.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg); im.hidden = false;
+    artMsg("Salvando a arte...", true);
+    const r = await API.admin.themes.uploadArt(new Blob([svg], { type: "image/svg+xml" }), "svg");
+    if (!r.ok) return artMsg(r.message + " A prévia acima não foi salva.");
+    $("art-url").value = r.url; showArt(r.url);
+    artMsg("Arte criada! Agora clique em \"Salvar tema\". Se quiser outra, mude a descrição e crie de novo.", true);
+  });
+
+  // Reduz a foto (máx. 1200 px de largura) antes de enviar
+  function shrinkPhoto(file) {
+    return new Promise((resolve, reject) => {
+      const img = new Image(); const url = URL.createObjectURL(file);
+      img.onload = () => {
+        const k = Math.min(1, 1200 / img.width); const c = document.createElement("canvas");
+        c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        c.toBlob((b) => (b ? resolve(b) : reject(new Error("blob"))), "image/jpeg", 0.85);
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("img")); };
+      img.src = url;
+    });
+  }
+  $("art-file").addEventListener("change", async (e) => {
+    const file = e.target.files && e.target.files[0]; e.target.value = "";
+    if (!file) return;
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return artMsg("Use uma imagem JPG, PNG ou WEBP.");
+    if (file.size > 12 * 1024 * 1024) return artMsg("Essa imagem é muito grande. Escolha uma de até 12 MB.");
+    artMsg("Enviando a imagem...", true);
+    try {
+      const r = await API.admin.themes.uploadArt(await shrinkPhoto(file), "jpg");
+      if (!r.ok) return artMsg(r.message);
+      $("art-url").value = r.url; showArt(r.url);
+      artMsg("Imagem enviada! Agora clique em \"Salvar tema\".", true);
+    } catch (err) { artMsg("Não foi possível usar essa imagem. Tente outra."); }
+  });
+  $("theme-reset").addEventListener("click", () => { form.reset(); form.elements.id.value = ""; themeErr(""); showArt(""); artMsg(""); });
   $("theme-list").addEventListener("click", async (e) => {
     const b = e.target.closest("[data-act]");
     if (!b) return;
@@ -327,7 +373,7 @@
     if (!t) return;
     if (b.dataset.act === "edit") {
       form.elements.id.value = t.id; form.elements.name.value = t.name; form.elements.description.value = t.description;
-      form.elements.products.value = t.products; form.elements.image.value = t.image; form.elements.shipDate.value = t.shipDate;
+      form.elements.products.value = t.products; form.elements.image.value = t.image; form.elements.shipDate.value = t.shipDate; showArt(t.image); artMsg("");
       form.scrollIntoView({ behavior: "smooth", block: "start" });
     } else if (b.dataset.act === "current") {
       const r = await API.admin.themes.setCurrent(t.isCurrent ? null : id);

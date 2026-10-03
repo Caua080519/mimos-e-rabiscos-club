@@ -183,7 +183,8 @@ $("shipping-note").textContent = S.itemsNote + " " + S.freeShippingNote;
         small.classList.remove("tbd");
         small.textContent = t.ship_date ? "chega em " + new Date(t.ship_date + "T12:00:00").toLocaleDateString("pt-BR") : "";
         if (/^(https?:\/\/|assets\/)/.test(t.image_url || "")) {
-          art.style.backgroundImage = `linear-gradient(rgba(255,255,255,.55), rgba(255,255,255,.55)), url("${encodeURI(t.image_url)}")`;
+          art.classList.add("tear__art--img");
+          art.style.backgroundImage = `url("${encodeURI(t.image_url)}")`;
           art.style.backgroundSize = "cover";
           art.style.backgroundPosition = "center";
         }

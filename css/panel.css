@@ -163,3 +163,6 @@ body.account { background: var(--beige); }
 :root[data-theme="dark"] .btn--danger { color: #ff9cc0; border-color: #8a3a5c; }
 :root[data-theme="dark"] .next-list .late { color: #ff9cc0; }
 :root[data-theme="dark"] .kpi--bad strong { color: #ff9cc0; }
+.theme-art { display: grid; gap: 10px; }
+.theme-art img { max-width: min(100%, 400px); height: auto; border-radius: 14px; box-shadow: var(--shadow-s); }
+.theme-art label.btn { cursor: pointer; }

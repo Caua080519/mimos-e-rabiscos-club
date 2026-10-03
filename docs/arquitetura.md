@@ -90,3 +90,8 @@ Objetivo: provar que um passaporte físico é verdadeiro e saber quem é cliente
 - **Regras impostas pelo banco** (função `owner_set_role`): no máximo **3 donos principais**, sempre pelo menos **1**, cargo inválido recusado, e só dono principal consegue mudar cargos. Cada mudança é registrada em `role_log` (quem mudou, de quem, de qual cargo para qual).
 - Ninguém muda o próprio cargo pelo site fora dessas regras: a coluna `role` não aceita alteração direta de usuários logados.
 - A primeira dona principal é definida uma vez no SQL Editor do Supabase (veja `supabase/003_perfil_e_donos_principais.sql`).
+## Imagem do tema do mês (2026-10-03)
+- No painel (aba Temas) há dois caminhos: **"Criar arte com o nome e a descrição"** (`js/theme-art.js`) e **"Enviar minha imagem"** (foto reduzida a 1200 px).
+- O criador de arte **não é inteligência artificial**: é um desenho montado por regras. Ele lê palavras-chave do nome e da descrição (jardim, noite, mar, outono, natal, escola, doce, arco-íris...), escolhe cores e peças e coloca o lapisinho no centro. O mesmo texto gera sempre a mesma arte. Sem palavra-chave conhecida, usa um visual padrão.
+- As imagens ficam na pasta pública `theme-art` do Supabase; só donos enviam. A home usa o endereço salvo no tema marcado "do mês".
+- Para arte feita por IA de verdade, seria preciso uma função no servidor chamando um serviço de imagens (com chave secreta guardada só lá) e aceitar o custo por imagem.
