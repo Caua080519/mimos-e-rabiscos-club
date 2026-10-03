@@ -198,12 +198,13 @@ $("shipping-note").textContent = S.itemsNote + " " + S.freeShippingNote;
   const paper = document.querySelector(".tear__paper");
   if (paper) {
     const ROWS = 10;
+    const OV = 0.7; // sobreposição entre as metades: sem frestas por onde a imagem apareça
     const rnd = (a, b) => a + Math.random() * (b - a);
     const xs = Array.from({ length: ROWS + 1 }, (_, k) => 50 + (k % 2 ? 1 : -1) * rnd(3, 8));
     let html = "";
     for (let i = 0; i < ROWS; i++) {
-      const y0 = Math.max(0, (i * 100) / ROWS - 0.3);
-      const y1 = Math.min(100, ((i + 1) * 100) / ROWS + 0.3);
+      const y0 = Math.max(0, (i * 100) / ROWS - 0.6);
+      const y1 = Math.min(100, ((i + 1) * 100) / ROWS + 0.6);
       const ym = (y0 + y1) / 2;
       const xm = 50 + rnd(-6, 6);
       const delay = (i * 0.085).toFixed(3);
@@ -211,9 +212,9 @@ $("shipping-note").textContent = S.itemsNote + " " + S.freeShippingNote;
       const content = `<span>Revelação</span><small>passe o mouse ou toque</small>`;
       html +=
         `<div class="tear__piece tear__piece--l" style="--delay:${delay}s;--rot:${rot}deg;transform-origin:0 ${ym}%;` +
-        `clip-path:polygon(0 ${y0}%,${xs[i]}% ${y0}%,${xm}% ${ym}%,${xs[i + 1]}% ${y1}%,0 ${y1}%)">${content}</div>` +
+        `clip-path:polygon(0 ${y0}%,${(xs[i] + OV).toFixed(2)}% ${y0}%,${(xm + OV).toFixed(2)}% ${ym}%,${(xs[i + 1] + OV).toFixed(2)}% ${y1}%,0 ${y1}%)">${content}</div>` +
         `<div class="tear__piece tear__piece--r" style="--delay:${delay}s;--rot:${rot}deg;transform-origin:100% ${ym}%;` +
-        `clip-path:polygon(${xs[i]}% ${y0}%,100% ${y0}%,100% ${y1}%,${xs[i + 1]}% ${y1}%,${xm}% ${ym}%)">${content}</div>`;
+        `clip-path:polygon(${(xs[i] - OV).toFixed(2)}% ${y0}%,100% ${y0}%,100% ${y1}%,${(xs[i + 1] - OV).toFixed(2)}% ${y1}%,${(xm - OV).toFixed(2)}% ${ym}%)">${content}</div>`;
     }
     paper.innerHTML = html;
   }

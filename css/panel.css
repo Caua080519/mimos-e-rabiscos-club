@@ -166,3 +166,4 @@ body.account { background: var(--beige); }
 .theme-art { display: grid; gap: 10px; }
 .theme-art img { max-width: min(100%, 400px); height: auto; border-radius: 14px; box-shadow: var(--shadow-s); }
 .theme-art label.btn { cursor: pointer; }
+.theme-preview p { white-space: pre-line; }

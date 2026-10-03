@@ -291,7 +291,8 @@ a { color: inherit; }
 .tear__spark--1 { top: 16%; left: 16%; } .tear__spark--2 { top: 24%; right: 14%; animation-delay: .7s; } .tear__spark--3 { bottom: 16%; right: 24%; animation-delay: 1.4s; }
 
 /* Papel que rasga de cima para baixo: faixas com borda irregular saem uma depois da outra (geradas em js/app.js) */
-.tear__paper { position: absolute; inset: 0; z-index: 2; filter: drop-shadow(0 2px 3px rgba(60, 40, 90, .28)); pointer-events: none; }
+.tear__paper { position: absolute; inset: -2px; z-index: 2; pointer-events: none; transition: filter .3s; }
+.tear:hover .tear__paper, .tear:focus-visible .tear__paper, .tear.is-open .tear__paper { filter: drop-shadow(0 2px 3px rgba(60, 40, 90, .28)); }
 .tear__piece { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 6px; text-align: center;
   background: repeating-linear-gradient(0deg, rgba(120, 100, 80, .035) 0 1px, transparent 1px 4px), linear-gradient(135deg, #fffefb, #f3ede4);
   transition: transform .7s cubic-bezier(.4, 0, .2, 1); }
@@ -527,3 +528,6 @@ body.admin { background: var(--beige); }
 .tear__art--img > :not(.tear__spark):not(.glit) { visibility: hidden; }
 
 .theme__card.tear--wide { aspect-ratio: 16 / 9; max-width: 600px; }
+
+/* Parágrafos e quebras de linha escritos no painel aparecem do mesmo jeito no site */
+#theme-text { white-space: pre-line; }
