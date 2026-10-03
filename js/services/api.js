@@ -49,10 +49,14 @@ const API = (function () {
     mode: PROTOTYPE ? "prototype" : "live",
 
     auth: {
-      // Real: sessão vinda do servidor (ex.: Supabase Auth, Firebase Auth). Aqui não há login.
-      async currentUser() { return null; },
+      // Real: a sessão vem do servidor (ex.: Supabase Auth ou Firebase Auth), com senha verificada lá.
+      // Protótipo: NÃO existe senha. Só há uma "sessão de demonstração" no navegador para ver a Área do cliente.
+      async currentUser() { try { const id = sessionStorage.getItem("mrc_demo_user"); return id ? { id, demo: true } : null; } catch (e) { return null; } },
       async signIn() { return notReady("Login"); },
-      async signOut() { return notReady("Sair"); },
+      async signUp() { return notReady("Criar conta"); },
+      async resetPassword() { return notReady("Recuperar senha"); },
+      async signInDemo(id) { try { sessionStorage.setItem("mrc_demo_user", id); return { ok: true }; } catch (e) { return { ok: false }; } },
+      async signOut() { try { sessionStorage.removeItem("mrc_demo_user"); } catch (e) {} return { ok: true }; },
     },
 
     customers: {

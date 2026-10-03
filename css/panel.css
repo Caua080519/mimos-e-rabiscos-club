@@ -55,6 +55,23 @@ body.account { background: var(--beige); }
 }
 @media (min-width: 1000px) { .stamps--acc { grid-template-columns: repeat(12, 1fr); } }
 
+/* Entrar / criar conta */
+.login__tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+.login__tabs button { flex: 1; font: inherit; font-weight: 700; border: 0; background: var(--beige); padding: .75em 1em; border-radius: 999px; cursor: pointer; color: var(--muted); min-height: 44px; }
+.login__tabs .is-on { background: var(--ink); color: var(--white); }
+.login__link { background: none; border: 0; font: inherit; color: var(--lilac-d); text-decoration: underline; cursor: pointer; padding: .6em; justify-self: start; }
+.demo-login { margin-top: 20px; display: grid; gap: 12px; background: var(--beige); }
+.demo-login h2 { font-size: 1.2rem; margin: 0; }
+.demo-login .sub { margin: 0; }
+
+/* Resumo e passaporte na área do cliente */
+.kpis--acc { margin: 0; }
+.acc-track { background: var(--lilac); border-radius: 12px; padding: 10px 12px; font-weight: 600; }
+.pass { display: grid; gap: 20px; align-items: start; justify-items: center; }
+.pass__img { width: min(100%, 300px); height: auto; border-radius: 28px; box-shadow: var(--shadow); }
+.pass__info { display: grid; gap: 12px; width: 100%; }
+@media (min-width: 760px) { .pass { grid-template-columns: auto 1fr; justify-items: start; } .pass__img { width: 300px; } }
+
 /* ===== Painel dos donos: blocos novos ===== */
 .adm-tabs { flex-wrap: wrap; }
 .kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }

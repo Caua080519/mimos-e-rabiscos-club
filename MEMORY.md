@@ -22,6 +22,8 @@
 - 2026-10-03 — Usuário aprovou as etapas 1-3 e pediu área do cliente + painel melhorado + PASSAPORTE DIGITAL, porque teme passaportes físicos falsificados e quer saber quem é cliente de verdade e a frequência. Feito como protótipo (dados fictícios): verificação compara código + nº de selos físicos com o registro; "cliente de verdade" = pagamento confirmado. Implementação real exige servidor.
 - Regra: telas de dados usam `API` (js/services/api.js), nunca dados direto; nunca pôr segredos no front (repo público).
 
+- 2026-10-03 — Usuário disse que a ÁREA DE LOGIN é super importante: cliente entra e vê suas caixas, pagamentos, entrega, frequência e imagem do passaporte. Front-end pronto (entrar.html + conta.html); login REAL depende de servidor (Supabase/Firebase). Nunca simular login que aceite qualquer senha; `SITE.auth.mode` controla a demo.
+
 ## Preferências do usuário
 - Fala português. Quer ver o resultado ao lado e ajustar aos poucos, então iterar em passos curtos.
 - Arquivos de memória do Code são separados dos do Cowork.

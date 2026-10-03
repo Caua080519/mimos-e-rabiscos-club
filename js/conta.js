@@ -1,4 +1,5 @@
-/* Área do cliente (PROTÓTIPO). Lê tudo via API (js/services/api.js), com dados fictícios. */
+/* Área do cliente (PROTÓTIPO). Lê tudo via API (js/services/api.js), com dados fictícios.
+   Só abre com uma sessão (a de demonstração, enquanto não há login real). */
 (function () {
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -8,6 +9,8 @@
   const addMonths = (s, n) => { const x = new Date(s + "T12:00:00"); x.setMonth(x.getMonth() + n); return x.toISOString().slice(0, 10); };
   const plan = (id) => SITE.plans.find((p) => p.id === id) || { name: id, price: 0, items: "" };
   const STEPS = ["A preparar", "Em preparação", "Pronta para envio", "Enviado", "Entregue"];
+  const STEP_LABEL = { Enviado: "Enviado (a caminho)" };
+  const PAID_BOX = ["A preparar", "Em preparação", "Pronta para envio", "Enviado"];
 
   $("year").textContent = new Date().getFullYear();
 
@@ -18,32 +21,65 @@
     if (m.showModal) m.showModal(); else alert(title + "\n\n" + text);
   }
 
-  const statusChip = (st) => {
-    const map = { ativo: "ok", cancelado: "off", inadimplente: "bad", "aguardando pagamento": "warn" };
-    return `<span class="st st--${map[st] || "warn"}">${esc(st)}</span>`;
-  };
+  const statusChip = (s) => `<span class="st st--${{ ativo: "ok", cancelado: "off", inadimplente: "bad", "aguardando pagamento": "warn" }[s] || "warn"}">${esc(s)}</span>`;
+
+  let current = null;
 
   function render(c) {
+    current = c;
     const p = plan(c.plan);
-    $("acc-hello").textContent = `Olá, ${c.name.split(" ")[0]} ${c.name.split(" ")[1] || ""}!`.trim();
-    const nextBilling = c.status === "ativo" || c.status === "inadimplente" ? addMonths(c.pay.lastPaidAt, 1) : "";
+    const parts = c.name.split(" ");
+    $("acc-hello").textContent = `Olá, ${parts[0]}${parts[1] ? " " + parts[1] : ""}!`;
     const nxt = c.next;
     const stepIdx = nxt ? STEPS.indexOf(nxt.status) : -1;
+    const nextBilling = (c.status === "ativo" || c.status === "inadimplente") && c.pay.lastPaidAt ? addMonths(c.pay.lastPaidAt, 1) : "";
 
-    // Passaporte digital: 12 espaços, carimbos do registro oficial
-    const stamps = c.stamps;
-    let stampsHtml = "";
-    for (let i = 1; i <= SITE.passport.total; i++) {
-      const s = stamps.find((x) => x.n === i);
-      stampsHtml += `<div class="stamp${s ? " stamp--on" : ""}${i === SITE.passport.total ? " stamp--gift" : ""}" title="${s ? "Selo " + i + " em " + d(s.date) : "Selo " + i + " ainda não recebido"}">${i === SITE.passport.total ? "★" : s ? "♥" : i}</div>`;
-    }
+    // Caixas pagas = já recebidas + a que está a caminho/ser preparada, se o pagamento dela está em dia
+    const paidBoxes = c.delivered + (nxt && c.pay.status === "pago" && PAID_BOX.includes(nxt.status) ? 1 : 0);
+    const lastBoxDate = paidBoxes && c.pay.lastPaidAt ? addMonths(c.pay.lastPaidAt, 0) : "";
+    const lastBoxMonth = paidBoxes ? addMonths(c.since, paidBoxes - 1) : "";
 
-    const history = Array.from({ length: c.delivered }, (_, i) => i + 1).reverse().map((n) => {
-      const date = addMonths(c.since, n - 1);
-      return `<li><span class="hist__ok">✓</span><div><strong>Caixa nº ${n}</strong><small>${esc(monthName(date))} · Tema: <span class="tbd">em definição</span></small></div></li>`;
-    }).join("");
+    // Pagamentos: um por caixa, o último na data do último pagamento (dados de demonstração)
+    const payments = Array.from({ length: paidBoxes }, (_, i) => paidBoxes - i).map((n) => ({ n, date: addMonths(c.pay.lastPaidAt, n - paidBoxes) }));
+    const shown = payments.slice(0, 6);
+
+    const history = Array.from({ length: c.delivered }, (_, i) => c.delivered - i).slice(0, 12).map((n) =>
+      `<li><span class="hist__ok">✓</span><div><strong>Caixa nº ${n}</strong><small>${esc(monthName(addMonths(c.since, n - 1)))} · Tema: <span class="tbd">em definição</span></small></div></li>`).join("");
+
+    const trackMsg = !nxt ? "" :
+      nxt.status === "Enviado" ? "Sua caixa já saiu e está a caminho. " + (nxt.tracking ? "Código de rastreio: " + nxt.tracking : "") :
+      nxt.status === "Entregue" ? "Sua caixa foi entregue." :
+      nxt.status === "Pronta para envio" ? "Sua caixa está pronta e será enviada em breve." :
+      "Estamos preparando a sua caixa com carinho.";
 
     $("acc-grid").innerHTML = `
+      <section class="acc-card acc-card--wide acc-summary">
+        <h2>Resumo</h2>
+        <div class="kpis kpis--acc">
+          <div class="kpi"><small>Caixas pagas</small><strong>${paidBoxes}</strong></div>
+          <div class="kpi"><small>Caixas recebidas</small><strong>${c.delivered}</strong></div>
+          <div class="kpi"><small>Última caixa</small><strong>${paidBoxes ? "nº " + paidBoxes : "—"}</strong></div>
+          <div class="kpi"><small>Frequência</small><strong>${c.metrics.regularity}%</strong></div>
+        </div>
+        <p class="acc-muted">${c.metrics.months ? "Você está no clube há " + c.metrics.months + (c.metrics.months === 1 ? " mês" : " meses") + " e já recebeu " + c.delivered + (c.delivered === 1 ? " caixa." : " caixas.") : "Sua jornada no clube começa quando o primeiro pagamento for confirmado."}</p>
+      </section>
+
+      <section class="acc-card acc-card--wide">
+        <h2>Minha próxima caixa</h2>
+        ${nxt ? `
+          <p class="acc-big">Caixa nº ${nxt.n}</p>
+          <p class="acc-track">${esc(trackMsg)}</p>
+          <dl class="acc-dl">
+            <div><dt>Envio previsto</dt><dd>${d(nxt.shipDate)}</dd></div>
+            <div><dt>Entrega em</dt><dd>${esc(c.address.line)}, ${esc(c.address.city)}</dd></div>
+            <div><dt>Tema</dt><dd><span class="tbd">em definição</span></dd></div>
+            <div><dt>Rastreio</dt><dd>${nxt.tracking ? esc(nxt.tracking) : "Ainda não enviado"}</dd></div>
+          </dl>
+          ${nxt.n === 1 ? `<p class="acc-note">Seu Passaporte dos Mimos vem nesta primeira caixa.</p>` : ""}
+          <ol class="steps-line">${STEPS.map((s, i) => `<li class="${i < stepIdx ? "done" : i === stepIdx ? "now" : ""}"><span></span>${esc(STEP_LABEL[s] || s)}</li>`).join("")}</ol>
+        ` : `<p class="acc-muted">Não há caixa a caminho no momento.</p>`}
+      </section>
+
       <section class="acc-card">
         <h2>Meu plano</h2>
         <p class="acc-big">${esc(p.name)} <span>${brl(p.price)}/mês</span></p>
@@ -66,35 +102,36 @@
       </section>
 
       <section class="acc-card acc-card--wide">
-        <h2>Minha próxima caixa</h2>
-        ${nxt ? `
-          <p class="acc-big">Caixa nº ${nxt.n}</p>
-          <dl class="acc-dl">
-            <div><dt>Envio previsto</dt><dd>${d(nxt.shipDate)}</dd></div>
-            <div><dt>Tema</dt><dd><span class="tbd">em definição</span></dd></div>
-            <div><dt>Rastreio</dt><dd>${nxt.tracking ? esc(nxt.tracking) : "Ainda não enviado"}</dd></div>
-          </dl>
-          ${nxt.n === 1 ? `<p class="acc-note">Seu Passaporte dos Mimos vem nesta primeira caixa.</p>` : ""}
-          <ol class="steps-line">${STEPS.map((s, i) => `<li class="${i < stepIdx ? "done" : i === stepIdx ? "now" : ""}"><span></span>${s}</li>`).join("")}</ol>
-        ` : `<p class="acc-muted">Não há caixa a caminho no momento.</p>`}
-      </section>
-
-      <section class="acc-card acc-card--wide">
-        <h2>Passaporte dos Mimos digital</h2>
+        <h2>Meu Passaporte dos Mimos</h2>
         ${c.passportCode ? `
-          <p class="acc-muted">Este é o registro oficial dos seus selos. A equipe confere o passaporte físico com ele.</p>
-          <div class="stamps stamps--acc">${stampsHtml}</div>
-          <dl class="acc-dl">
-            <div><dt>Código do passaporte</dt><dd class="mono">${esc(c.passportCode)}</dd></div>
-            <div><dt>Selos</dt><dd>${stamps.length} de ${SITE.passport.total}</dd></div>
-            <div><dt>Último selo</dt><dd>${stamps.length ? d(stamps[stamps.length - 1].date) : "—"}</dd></div>
-          </dl>
-          <p class="acc-muted tbd">${esc(SITE.passport.gift)}</p>
+          <div class="pass">
+            <img class="pass__img" id="pass-img" src="${PassportImage.dataUrl(c, SITE.passport.total)}" alt="Seu Passaporte dos Mimos com ${c.stamps.length} de ${SITE.passport.total} selos" width="360" height="500">
+            <div class="pass__info">
+              <p class="acc-muted">Este é o registro oficial dos seus selos. A equipe confere o passaporte físico com ele.</p>
+              <dl class="acc-dl">
+                <div><dt>Código</dt><dd class="mono">${esc(c.passportCode)}</dd></div>
+                <div><dt>Selos</dt><dd>${c.stamps.length} de ${SITE.passport.total}</dd></div>
+                <div><dt>Último selo</dt><dd>${c.stamps.length ? d(c.stamps[c.stamps.length - 1].date) : "—"}</dd></div>
+              </dl>
+              <p class="acc-muted tbd">${esc(SITE.passport.gift)}</p>
+              <button class="btn btn--small" id="pass-dl" type="button">Baixar imagem do passaporte</button>
+            </div>
+          </div>
         ` : `<p class="acc-muted">O passaporte é criado quando o primeiro pagamento for confirmado.</p>`}
       </section>
 
       <section class="acc-card acc-card--wide">
-        <h2>Histórico de caixas</h2>
+        <h2>Meus pagamentos</h2>
+        ${payments.length ? `
+          <p class="acc-muted">Caixas pagas até a nº ${paidBoxes}${lastBoxMonth ? " (" + esc(monthName(lastBoxMonth)) + ")" : ""}. Forma de pagamento: ${esc(c.pay.method)}.</p>
+          <ul class="hist">${shown.map((x) => `<li><span class="hist__ok">R$</span><div><strong>Caixa nº ${x.n} · ${brl(p.price)}</strong><small>Pago em ${d(x.date)} · ${esc(c.pay.method)}</small></div></li>`).join("")}</ul>
+          ${payments.length > shown.length ? `<p class="acc-muted">E mais ${payments.length - shown.length} pagamento(s) anteriores.</p>` : ""}
+          ${c.pay.status !== "pago" ? `<p class="acc-note">Pagamento ${esc(c.pay.status)}. Regularize para continuar recebendo as caixas.</p>` : ""}
+        ` : `<p class="acc-muted">Você ainda não tem pagamentos confirmados.</p>`}
+      </section>
+
+      <section class="acc-card acc-card--wide">
+        <h2>Histórico de caixas recebidas</h2>
         ${history ? `<ul class="hist">${history}</ul>` : `<p class="acc-muted">Você ainda não recebeu nenhuma caixa. A primeira está a caminho.</p>`}
       </section>
 
@@ -127,6 +164,11 @@
   }
 
   $("acc-grid").addEventListener("click", async (e) => {
+    if (e.target.closest("#pass-dl")) {
+      const ok = await PassportImage.downloadPng(current, SITE.passport.total, "passaporte-dos-mimos.png");
+      if (!ok) proto("Não foi possível baixar", "Seu navegador não conseguiu gerar a imagem. Tente de novo ou use outro navegador.");
+      return;
+    }
     const b = e.target.closest("[data-proto]");
     if (!b) return;
     const what = b.dataset.proto;
@@ -137,10 +179,13 @@
     proto(what + " (protótipo)", res.message + " Nenhuma alteração foi feita.");
   });
 
+  $("logout").addEventListener("click", async () => { await API.auth.signOut(); location.href = "entrar.html"; });
+
   (async function init() {
-    const list = await API.customers.list();
-    $("acc-who").innerHTML = list.map((c) => `<option value="${c.id}">${esc(c.name)} · ${esc(c.status)}</option>`).join("");
-    $("acc-who").addEventListener("change", async () => render(await API.customers.get($("acc-who").value)));
-    render(list[0]);
+    const user = await API.auth.currentUser();
+    if (!user) { location.replace("entrar.html"); return; }
+    const c = await API.customers.get(user.id);
+    if (!c) { await API.auth.signOut(); location.replace("entrar.html"); return; }
+    render(c);
   })();
 })();

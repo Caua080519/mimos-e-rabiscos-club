@@ -26,6 +26,7 @@ Fidelidade físico: a primeira compra dá direito ao passaporte; cada Box recebi
 - [x] Etapas 1-3 da revisão (SEO/desempenho, landing, responsividade) feitas em commits separados. robots.txt, sitemap.xml e 404.html criados; URLs usam o domínio do GitHub Pages e devem ser trocadas quando o domínio próprio estiver ativo.
 - [x] Etapa 4: `conta.html` (Área do cliente, PROTÓTIPO, dados fictícios, sem login). Inclui Passaporte digital.
 - [x] Etapa 5: Painel com abas Resumo, Clientes, Envios, Temas, Passaportes (PROTÓTIPO); `js/services/api.js`; `docs/arquitetura.md`.
+- [x] Login de clientes: `entrar.html` (Entrar, Criar conta, Esqueci a senha) + Área do cliente por sessão. PROTÓTIPO: só a conta de DEMONSTRAÇÃO funciona; link "Entrar" no menu. Área mostra caixas pagas/recebidas, última caixa, frequência, andamento da entrega, pagamentos e imagem do passaporte (baixável em PNG).
 - [ ] Passaporte digital real: registro oficial de selos no servidor + código impossível de adivinhar (ver docs/arquitetura.md). Hoje só demonstração (`MR-DEMO-000X`).
 - [ ] Servidor com login + banco de dados + gateway de pagamento: ainda não existe; é o próximo grande passo.
 - [ ] Ajustes de visual com o usuário

@@ -8,7 +8,7 @@ Para ficar funcional, troca-se a implementação de cada grupo por chamadas a um
 
 | Grupo da `API` | Hoje (protótipo) | No site real |
 |---|---|---|
-| `auth` | não há login | login de clientes e de donos (provedor de autenticação) |
+| `auth` | sem senha: só uma sessão de DEMONSTRAÇÃO no navegador (`entrar.html` → `conta.html`) | login real de clientes e de donos, com senha verificada no servidor |
 | `customers` | dados fictícios | tabela de clientes no banco |
 | `subscriptions` | devolve "protótipo" | alterar plano, endereço e cancelar no servidor |
 | `payments` | devolve "protótipo" | gateway (Mercado Pago, Stripe ou Asaas) |
@@ -61,3 +61,8 @@ Objetivo: provar que um passaporte físico é verdadeiro e saber quem é cliente
 - `admin.html`: Resumo, Clientes, Temas e Passaportes (dados fictícios); Envios (localStorage).
 - O tema salvo no painel **não** altera a home.
 - A página de assinatura leva ao pagamento só quando houver link em `SITE.payment.links`; hoje fica desativada.
+
+## Login dos clientes (entrar.html)
+- **Hoje:** entrar.html tem os formulários de Entrar, Criar conta e Esqueci a senha, mas em SITE.auth.mode = "prototype" eles apenas avisam que o login real não está ativo (a senha digitada é apagada e nunca é guardada). A área conta.html só abre com a sessão de demonstração e redireciona para entrar.html sem ela.
+- **Para ligar o login real:** (1) escolher o provedor (ex.: Supabase Auth ou Firebase Auth); (2) implementar API.auth.signIn/signUp/resetPassword/currentUser/signOut com ele (a chave pública do provedor pode ficar no site; a chave secreta nunca); (3) criar no banco a regra "cada cliente só lê as próprias linhas"; (4) trocar SITE.auth.mode para "live", o que esconde a conta de demonstração.
+- A tela e a área do cliente não precisam ser reescritas: só a implementação de API.

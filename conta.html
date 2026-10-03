@@ -26,7 +26,7 @@
 
 <main class="container acc">
   <div class="proto-banner" role="note">
-    <strong>Protótipo.</strong> Esta área ainda não tem login nem servidor. Os dados abaixo são <strong>fictícios (demonstração)</strong> e os botões de alterar, pagar e cancelar <strong>não fazem nada de verdade</strong>.
+    <strong>Protótipo.</strong> O login real ainda não está ativo: você entrou numa <strong>conta de demonstração</strong>. Os dados abaixo são <strong>fictícios (demonstração)</strong> e os botões de alterar, pagar e cancelar <strong>não fazem nada de verdade</strong>.
   </div>
 
   <div class="acc__top">
@@ -34,9 +34,7 @@
       <p class="eyebrow">Área do cliente</p>
       <h1 class="h1-s" id="acc-hello">Olá!</h1>
     </div>
-    <label class="acc__who">Ver como
-      <select id="acc-who"></select>
-    </label>
+    <button class="btn btn--ghost btn--small" id="logout" type="button">Sair</button>
   </div>
 
   <div class="acc__grid" id="acc-grid" aria-live="polite"></div>
@@ -58,6 +56,7 @@
 <script src="js/data.js"></script>
 <script src="js/mock/demo-data.js"></script>
 <script src="js/services/api.js"></script>
+<script src="js/passport-image.js"></script>
 <script src="js/conta.js"></script>
 </body>
 </html>

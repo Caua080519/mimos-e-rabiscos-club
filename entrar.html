@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Entrar | Mimos e Rabiscos Club</title>
+  <meta name="theme-color" content="#dceffb">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/lapis.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/panel.css">
+</head>
+<body>
+<header class="header">
+  <div class="container header__in">
+    <a class="logo" href="index.html" aria-label="Voltar para o início">
+      <img src="assets/lapis.svg" alt="" width="26" height="38">
+      <span>Mimos e Rabiscos <em>Club</em></span>
+    </a>
+    <a class="btn btn--ghost btn--small" href="index.html">Voltar ao site</a>
+  </div>
+</header>
+
+<main class="signup">
+  <div class="container container--narrow login">
+    <header class="section__head">
+      <p class="eyebrow">Área do cliente</p>
+      <h1 class="h1-s">Entre na sua conta</h1>
+      <p class="sub">Acompanhe suas caixas, seus pagamentos e o seu Passaporte dos Mimos.</p>
+    </header>
+
+    <div class="card">
+      <div class="login__tabs" role="tablist" id="login-tabs">
+        <button role="tab" class="is-on" data-pane="in">Entrar</button>
+        <button role="tab" data-pane="up">Criar conta</button>
+      </div>
+
+      <form class="form" id="form-in" novalidate>
+        <label>E-mail <input name="email" type="email" autocomplete="email" required></label>
+        <label>Senha <input name="password" type="password" autocomplete="current-password" required></label>
+        <button class="btn" type="submit">Entrar</button>
+        <button class="login__link" type="button" id="btn-forgot">Esqueci minha senha</button>
+      </form>
+
+      <form class="form" id="form-up" novalidate hidden>
+        <label>Nome completo <input name="name" type="text" autocomplete="name" placeholder="Nome e sobrenome" required></label>
+        <label>E-mail <input name="email" type="email" autocomplete="email" required></label>
+        <label>Senha <input name="password" type="password" autocomplete="new-password" minlength="8" required></label>
+        <label class="check"><input name="consent" type="checkbox" required><span>Li e aceito os termos e a política de privacidade <span class="tbd">(textos em definição)</span>.</span></label>
+        <button class="btn" type="submit">Criar conta</button>
+      </form>
+
+      <p class="error" id="login-msg" role="alert" hidden></p>
+    </div>
+
+    <!-- Só aparece enquanto SITE.auth.mode === "prototype" -->
+    <section class="card demo-login" id="demo-login" hidden>
+      <h2>Ver a área de demonstração</h2>
+      <p class="sub">O login real ainda não está ativo. Para conhecer como a área do cliente vai ficar, entre como um cliente <strong>fictício</strong>:</p>
+      <label class="acc-sel">Cliente de demonstração
+        <select id="demo-who"></select>
+      </label>
+      <button class="btn btn--ghost" type="button" id="demo-go">Entrar na demonstração</button>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container"><small>© <span id="year"></span> Mimos e Rabiscos. Todos os direitos reservados.</small></div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/mock/demo-data.js"></script>
+<script src="js/services/api.js"></script>
+<script src="js/entrar.js"></script>
+</body>
+</html>

@@ -460,3 +460,7 @@ body.admin { background: var(--beige); }
 .notfound h1 { font-size: clamp(1.9rem, 6vw, 3rem); }
 .notfound .lead { margin-inline: auto; }
 .notfound__btns { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 20px; }
+
+/* Link Entrar no menu */
+.nav__login { font-weight: 700 !important; color: var(--ink) !important; }
+@media (min-width: 880px) { .nav__login { border: 1.5px solid var(--line); border-radius: 999px; padding: .35em 1em; } }

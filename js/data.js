@@ -88,6 +88,11 @@ const SITE = {
     },
   },
 
+  /* Login de clientes. "prototype" = ainda não há servidor: o formulário avisa isso e só a conta de
+     DEMONSTRAÇÃO funciona. Quando o login real existir (docs/arquitetura.md), troque para "live"
+     e o botão de demonstração some. */
+  auth: { mode: "prototype" },
+
   freeShippingNote: "*Frete grátis em avaliação. Condições em definição.",
 
   /* Linhas da tabela comparativa. Use true/false, texto ou TBD */
