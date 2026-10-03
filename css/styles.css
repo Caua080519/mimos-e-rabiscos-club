@@ -24,6 +24,7 @@ body {
   line-height: 1.6; font-size: 16px; -webkit-font-smoothing: antialiased;
 }
 img { max-width: 100%; height: auto; }
+[hidden] { display: none !important; }
 h1, h2, h3 { font-family: var(--font-h); font-weight: 600; line-height: 1.15; margin: 0 0 .5em; }
 h1 { font-size: clamp(2.2rem, 7vw, 3.6rem); }
 h2 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); }
