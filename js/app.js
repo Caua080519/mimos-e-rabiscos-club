@@ -29,12 +29,6 @@
   // Hero + posicionamento
   $("hero-title").textContent = S.brand.tagline;
   $("hero-lead").textContent = S.brand.heroLead;
-  const fromPrice = Math.min(...S.plans.map((p) => p.price));
-  $("hero-facts").innerHTML = [
-    `A partir de <strong>${brl(fromPrice)}</strong>/mês`,
-    "Uma caixa nova todo mês",
-    "Entrar na lista não gera cobrança",
-  ].map((t) => `<li>${t}</li>`).join("");
   $("statement").textContent = S.brand.positioning;
 
   // Passos

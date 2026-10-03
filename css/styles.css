@@ -305,9 +305,6 @@ a { color: inherit; }
 :focus-visible { outline: 3px solid var(--lilac-d); outline-offset: 3px; border-radius: 6px; }
 .btn--lg { padding: 1em 1.9em; font-size: 1.05rem; min-height: 52px; }
 .hero__text .lead { font-size: 1.15rem; max-width: 46ch; }
-.hero__facts { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-wrap: wrap; gap: 8px 10px; }
-.hero__facts li { background: rgba(255, 255, 255, .8); border: 1px solid var(--line); border-radius: 999px; padding: .35em .95em; font-size: .85rem; font-weight: 600; color: var(--muted); }
-.hero__facts strong { color: var(--ink); }
 
 /* Cards das Boxes: topo colorido com a quantidade de produtos */
 .plan { padding-top: 28px; }
