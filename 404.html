@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Página não encontrada | Mimos e Rabiscos Club</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#dceffb">
+  <!-- A 404 pode ser aberta em qualquer caminho; este trecho acerta a base para o CSS e as imagens carregarem. -->
+  <script>
+    (function () {
+      var gh = location.hostname.slice(-10) === ".github.io";
+      var seg = location.pathname.split("/")[1];
+      document.write('<base href="' + (gh && seg ? "/" + seg + "/" : "/") + '">');
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito:wght@400;600;700&family=Chewy&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/lapis.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<main class="notfound">
+  <div class="container">
+    <img class="notfound__pencil" src="assets/lapis.svg" alt="" width="72" height="108">
+    <p class="eyebrow">Erro 404</p>
+    <h1>Essa página saiu para rabiscar</h1>
+    <p class="lead">Não encontramos o que você procurava. Mas a caixa do mês continua te esperando.</p>
+    <div class="notfound__btns">
+      <a class="btn btn--lg" href="./">Voltar ao início</a>
+      <a class="btn btn--ghost btn--lg" href="./#boxes">Ver as Boxes</a>
+    </div>
+  </div>
+</main>
+</body>
+</html>

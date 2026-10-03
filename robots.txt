@@ -1,0 +1,8 @@
+# Pede aos buscadores para não listar o painel. Isto NÃO é proteção de segurança:
+# qualquer pessoa que saiba o endereço consegue abrir /admin.html.
+User-agent: *
+Allow: /
+Disallow: /admin.html
+
+# Quando o domínio próprio (mimoserabiscosclub.com.br) estiver ativo, troque o endereço abaixo.
+Sitemap: https://caua080519.github.io/mimos-e-rabiscos-club/sitemap.xml

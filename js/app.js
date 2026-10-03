@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   const $ = (id) => document.getElementById(id);
   const brl = (n) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -98,7 +98,7 @@ $("shipping-note").textContent = S.itemsNote + " " + S.freeShippingNote;
 
   // Momentos Mimo
   $("moments").innerHTML = S.moments
-    .map((m) => `<figure class="moment">${m.img ? `<img class="moment__img" src="${esc(m.img)}" alt="${esc(m.alt || "")}" loading="lazy">` : `<div class="moment__ph" aria-hidden="true"></div>`}<figcaption><strong>${esc(m.name)}</strong><p>${esc(m.text)}</p></figcaption></figure>`)
+    .map((m) => `<figure class="moment">${m.img ? `<img class="moment__img" src="${esc(m.img)}" alt="${esc(m.alt || "")}" width="400" height="400" loading="lazy" decoding="async">` : `<div class="moment__ph" aria-hidden="true"></div>`}<figcaption><strong>${esc(m.name)}</strong><p>${esc(m.text)}</p></figcaption></figure>`)
     .join("");
 
   // FAQ

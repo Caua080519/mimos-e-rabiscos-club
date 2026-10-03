@@ -137,7 +137,7 @@ const SITE = {
   faq: [
     {
       q: "Como funciona o clube?",
-      a: "Você escolhe uma Box, assina e recebe todo mês uma caixa com produtos de papelaria, tema do mês e surpresas.",
+      a: "Você escolhe uma box de papelaria, assina e recebe todo mês uma caixa com produtos ligados ao tema do mês e algumas surpresas.",
     },
     {
       q: "Quais formas de pagamento?",
