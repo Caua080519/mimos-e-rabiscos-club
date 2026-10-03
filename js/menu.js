@@ -71,7 +71,7 @@
       : "";
     const account = me
       ? `<a role="menuitem" href="conta.html">Área do cliente</a>
-         ${me.role === "admin" ? `<a role="menuitem" href="admin.html">Painel dos donos</a>` : ""}
+         ${me.role === "admin" || me.role === "owner" ? `<a role="menuitem" href="admin.html">Painel dos donos</a>` : ""}
          <a role="menuitem" href="perfil.html">Minha conta</a>`
       : `<a role="menuitem" href="conta.html">Área do cliente</a>`;
     const seg = (v, label) => `<button type="button" role="menuitemradio" aria-checked="${mode === v}" data-mode="${v}" class="${mode === v ? "is-on" : ""}">${label}</button>`;

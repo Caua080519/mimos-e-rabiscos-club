@@ -30,6 +30,8 @@
 - Dados de cliente no painel vêm de cadastro público: SEMPRE escapar HTML (esc) antes de renderizar (XSS).
 - O servidor local (python http.server) tem limite de 2h; quando cair o aviso diz para não reiniciar se já estava no máximo. Verificar JS com `node --check` e testar RLS por SQL com rollback.
 
+- 2026-10-03 — Usuário pediu hierarquia: ele é dono principal e quer poder criar até 3 donos principais e outros donos. Implementado (cargos customer/admin/owner, RPC owner_set_role, aba Donos). Para dar cargo a alguém: a pessoa precisa ter conta; o dono principal muda pela aba Donos.
+
 ## Preferências do usuário
 - Fala português. Quer ver o resultado ao lado e ajustar aos poucos, então iterar em passos curtos.
 - Arquivos de memória do Code são separados dos do Cowork.

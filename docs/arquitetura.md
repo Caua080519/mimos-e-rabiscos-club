@@ -83,3 +83,10 @@ Objetivo: provar que um passaporte físico é verdadeiro e saber quem é cliente
 - **Minha conta** (`perfil.html`): foto, como quer ser chamado(a), nome, telefone e troca de senha. A foto é reduzida no navegador (256 px) e vai para a pasta `avatars/<id do usuário>/` do Supabase Storage; só o próprio usuário envia, troca ou apaga arquivos na própria pasta (regras no banco).
 - **Senha salva:** a gente nunca guarda senha. Os formulários usam os campos padrão (`autocomplete`), então o gerenciador de senhas do navegador oferece salvar.
 - Migration: `perfil_apelido_foto` (colunas `display_name` e `avatar_path`, pasta `avatars`).
+## Cargos: cliente, dono e dono principal (2026-10-03)
+- **Cliente** (`customer`): vê só os próprios dados.
+- **Dono** (`admin`): usa o Painel dos donos (clientes, pagamentos, caixas, selos, temas, passaportes).
+- **Dono principal** (`owner`): faz tudo isso e também decide quem é dono ou dono principal, pela aba **Donos** do painel (só ele vê essa aba).
+- **Regras impostas pelo banco** (função `owner_set_role`): no máximo **3 donos principais**, sempre pelo menos **1**, cargo inválido recusado, e só dono principal consegue mudar cargos. Cada mudança é registrada em `role_log` (quem mudou, de quem, de qual cargo para qual).
+- Ninguém muda o próprio cargo pelo site fora dessas regras: a coluna `role` não aceita alteração direta de usuários logados.
+- A primeira dona principal é definida uma vez no SQL Editor do Supabase (veja `supabase/003_perfil_e_donos_principais.sql`).

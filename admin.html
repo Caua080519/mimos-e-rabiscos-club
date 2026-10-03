@@ -45,6 +45,7 @@
       <button role="tab" data-tab="orders">Envios</button>
       <button role="tab" data-tab="themes">Temas</button>
       <button role="tab" data-tab="passports">Passaportes</button>
+      <button role="tab" data-tab="owners" id="tab-owners-btn" hidden>Donos</button>
       <button class="btn btn--small btn--ghost" id="btn-refresh" type="button">Atualizar</button>
     </div>
 
@@ -119,6 +120,15 @@
       </form>
       <h2 class="adm-sub">Registro de selos por cliente</h2>
       <div class="adm-table-wrap"><table class="adm-table" id="p-table"></table></div>
+    </section>
+    <!-- DONOS (só dono principal) -->
+    <section id="tab-owners" role="tabpanel" hidden>
+      <p class="adm-hint"><strong>Quem é dono?</strong> <em>Dono</em> usa o painel (clientes, pagamentos, caixas). <em>Dono principal</em> faz isso e também decide quem é dono ou dono principal. O máximo é <strong>3 donos principais</strong> e sempre precisa existir pelo menos 1.</p>
+      <div class="kpis" id="owners-kpis"></div>
+      <div class="adm-filters"><label>Buscar conta <input id="o-q" type="search" placeholder="Nome ou e-mail"></label></div>
+      <div class="adm-table-wrap"><table class="adm-table" id="o-table"></table></div>
+      <h2 class="adm-sub">Últimas mudanças de cargo</h2>
+      <ul class="next-list" id="o-log"></ul>
     </section>
   </div>
 </main>

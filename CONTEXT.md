@@ -34,6 +34,7 @@ Fidelidade físico: a primeira compra dá direito ao passaporte; cada Box recebi
 - [ ] Pendente: o usuário confirmar o e-mail dele para virar admin (já existe 1 conta cadastrada, aguardando confirmação do usuário de que é dele) e configurar Pix (`SITE.payment.pix`) ou link de pagamento.
 - [x] Menu dos três pontinhos (Área do cliente, Minha conta, Claro/Escuro/Automático, Sair), `perfil.html` (foto, apelido, nome, telefone, senha), modo escuro, sessão contínua, login volta à página de origem. NÃO testado no navegador (servidor local caiu): conferir visualmente, principalmente o modo escuro e o cabeçalho no celular.
 - [x] Cabeçalho (home e assinar): botão "Entrar" ao lado do "Assinar" enquanto não há login; com login vira "Área do cliente". Deslogado, "Área do cliente" fica só dentro dos três pontinhos.
+- [x] Cargos: cliente / dono / dono principal (máx. 3, mínimo 1), aba "Donos" no painel só para dono principal, histórico em `role_log`. A conta do usuário é dono principal.
 - [ ] Gateway de pagamento automático; trocar plano/cancelar pelo cliente; e-mails automáticos; textos legais; domínio.
 - [ ] Ajustes de visual com o usuário
 - [ ] Checkout simulado em 7 etapas (Box, duração, conta, endereço, pagamento, revisão, confirmação)

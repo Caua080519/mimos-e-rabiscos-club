@@ -22,6 +22,7 @@ const API = (function () {
   const baseUrl = (page) => new URL(page, location.href).href;
   const notReady = (what) => ({ ok: false, prototype: true, message: `${what}: ainda não está disponível. Nada foi alterado.` });
   const friendly = (err) => {
+    if (err && err.code === "P0001" && err.message) return err.message; // mensagens das regras do banco, já em português
     const m = String((err && (err.code || err.message)) || "").toLowerCase();
     if (m.includes("invalid_credentials") || m.includes("invalid login")) return "E-mail ou senha incorretos.";
     if (m.includes("email_not_confirmed") || m.includes("not confirmed")) return "Confirme seu e-mail pelo link que enviamos antes de entrar.";
@@ -271,7 +272,7 @@ const API = (function () {
         const uid = u.session && u.session.user.id;
         if (!uid) return false;
         const { data } = await sb.from("profiles").select("role").eq("id", uid).maybeSingle();
-        return !!data && data.role === "admin";
+        return !!data && (data.role === "admin" || data.role === "owner");
       },
       async customers() {
         if (!LIVE) return DEMO_CUSTOMERS.map((c) => withMetrics({ ...c, demo: true }));
@@ -349,6 +350,27 @@ const API = (function () {
       },
     },
 
+    /* ---------- DONOS PRINCIPAIS: quem pode ser dono ----------
+       Só quem tem cargo "owner" (dono principal) consegue. O banco recusa os outros e impõe: no máximo 3 donos principais, sempre pelo menos 1. */
+    owner: {
+      async accounts() {
+        if (!LIVE) return [];
+        const { data, error } = await sb.from("profiles").select("id,name,display_name,email,role,created_at").order("created_at");
+        if (error) throw error;
+        return data || [];
+      },
+      async setRole(userId, role) {
+        if (!LIVE) return notReady("Mudar cargo");
+        const { error } = await sb.rpc("owner_set_role", { p_user: userId, p_role: role });
+        return error ? fail(error) : { ok: true };
+      },
+      async log() {
+        if (!LIVE) return [];
+        const { data, error } = await sb.from("role_log").select("changed_by,target,old_role,new_role,changed_at").order("changed_at", { ascending: false }).limit(20);
+        if (error) throw error;
+        return data || [];
+      },
+    },
     passports: { stampsOf },
   };
 })();

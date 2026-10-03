@@ -17,6 +17,9 @@
 
   let customers = [];
   let themes = [];
+  let isOwner = false;
+  let accounts = [];
+  let roleLog = [];
 
   const toast = (msg) => { const t = $("toast"); t.textContent = msg; t.hidden = !msg; if (msg) setTimeout(() => { t.hidden = true; }, 6000); };
 
@@ -28,6 +31,8 @@
       showGate("Esta conta não tem acesso ao painel dos donos. Entre com a conta de dono.");
       return;
     }
+    if (LIVE) { const me = await API.profile.me(); isOwner = !!me && me.role === "owner"; }
+    $("tab-owners-btn").hidden = !isOwner;
     $("gate").hidden = true;
     $("app").hidden = false;
     $("btn-logout").hidden = !LIVE;
@@ -51,7 +56,46 @@
     const r = await API.auth.signIn(f.email.value.trim(), f.password.value);
     f.password.value = "";
     if (!r.ok) { const m = $("gate-msg"); m.textContent = r.message; m.hidden = false; return; }
-    start();
+    /* ---------- Donos (só dono principal) ---------- */
+  const ROLE_LABEL = { customer: "Cliente", admin: "Dono", owner: "Dono principal" };
+  const nameOf = (a) => a.display_name || a.name || a.email || "—";
+  ["o-q"].forEach((id) => $(id).addEventListener("input", renderOwners));
+
+  function renderOwners() {
+    if (!isOwner) return;
+    const owners = accounts.filter((a) => a.role === "owner").length;
+    $("owners-kpis").innerHTML = [
+      ["Donos principais", `${owners} de 3`], ["Donos", accounts.filter((a) => a.role === "admin").length], ["Contas no total", accounts.length],
+    ].map(([l, v]) => `<div class="kpi"><small>${l}</small><strong>${v}</strong></div>`).join("");
+    const q = $("o-q").value.trim().toLowerCase();
+    const list = accounts.filter((a) => !q || (nameOf(a) + " " + (a.email || "")).toLowerCase().includes(q));
+    const opt = (v, cur) => `<option value="${v}"${v === cur ? " selected" : ""}>${ROLE_LABEL[v]}</option>`;
+    $("o-table").innerHTML = `<thead><tr><th>Conta</th><th>Cargo atual</th><th>Mudar para</th></tr></thead><tbody>` +
+      (list.length ? list.map((a) => `<tr data-id="${esc(a.id)}">
+        <td><strong>${esc(nameOf(a))}</strong><small>${esc(a.email || "")}</small></td>
+        <td><span class="chip">${esc(ROLE_LABEL[a.role] || a.role)}</span></td>
+        <td class="acts"><select data-f="role" aria-label="Novo cargo">${opt("customer", a.role)}${opt("admin", a.role)}${opt("owner", a.role)}</select>
+          <button class="btn btn--small" data-act="role" type="button">Aplicar</button></td>
+      </tr>`).join("") : `<tr><td colspan="3" class="adm-empty">Nenhuma conta encontrada.</td></tr>`) + `</tbody>`;
+    const byId = Object.fromEntries(accounts.map((a) => [a.id, a]));
+    $("o-log").innerHTML = roleLog.length
+      ? roleLog.map((l) => `<li><span><strong>${esc(byId[l.target] ? nameOf(byId[l.target]) : "conta removida")}</strong>: ${esc(ROLE_LABEL[l.old_role] || l.old_role)} → ${esc(ROLE_LABEL[l.new_role] || l.new_role)}</span><span>por ${esc(byId[l.changed_by] ? nameOf(byId[l.changed_by]) : "—")} · ${new Date(l.changed_at).toLocaleString("pt-BR")}</span></li>`).join("")
+      : `<li>Nenhuma mudança ainda.</li>`;
+  }
+
+  $("o-table").addEventListener("click", async (e) => {
+    const b = e.target.closest('[data-act="role"]');
+    if (!b) return;
+    const tr = b.closest("tr"); const a = accounts.find((x) => x.id === tr.dataset.id);
+    const role = tr.querySelector('[data-f="role"]').value;
+    if (!a || a.role === role) return;
+    if (!confirm(`Mudar o cargo de ${nameOf(a)} (${a.email || ""}) para "${ROLE_LABEL[role]}"?${role !== "customer" ? "\n\nEssa pessoa passa a ver os dados de todos os clientes." : "\n\nEssa pessoa perde o acesso ao painel."}`)) return;
+    b.disabled = true;
+    const r = await API.owner.setRole(a.id, role);
+    if (!r.ok) toast(r.message);
+    await load();
+  });
+  start();
   });
   $("btn-logout").addEventListener("click", async () => { await API.auth.signOut(); location.reload(); });
   $("btn-refresh").addEventListener("click", () => load());
@@ -60,16 +104,17 @@
   async function load() {
     try {
       [customers, themes] = await Promise.all([API.admin.customers(), API.admin.themes.list()]);
+      if (isOwner) [accounts, roleLog] = await Promise.all([API.owner.accounts(), API.owner.log()]);
     } catch (err) {
       toast("Não foi possível carregar os dados agora. Tente atualizar.");
       return;
     }
     renderAll();
   }
-  function renderAll() { renderSummary(); renderCustomers(); renderOrders(); renderThemes(); renderPassportTable(); }
+  function renderAll() { renderSummary(); renderCustomers(); renderOrders(); renderThemes(); renderPassportTable(); if (isOwner) renderOwners(); }
 
   /* ---------- abas ---------- */
-  const panels = ["summary", "customers", "orders", "themes", "passports"];
+  const panels = ["summary", "customers", "orders", "themes", "passports", "owners"];
   $("tabs").addEventListener("click", (e) => {
     const b = e.target.closest("button[data-tab]");
     if (!b) return;
@@ -133,7 +178,7 @@
     $("c-table").innerHTML =
       `<thead><tr><th>Cliente</th><th>Plano</th><th>Status</th><th>Assinante desde</th><th>Endereço</th><th>Pagamento</th><th>Próxima caixa</th><th>Rastreio</th><th>Frequência</th><th>Ações</th></tr></thead><tbody>` +
       (list.length ? list.map((c) => `<tr data-id="${esc(c.id)}">
-        <td><strong>${esc(c.name)}</strong>${c.role === "admin" ? ' <span class="chip">dono</span>' : ""}<small>${esc(c.email)}</small>${c.phone ? `<small>${esc(c.phone)}</small>` : ""}<small>${c.metrics.confirmed ? "Cliente confirmado" : "Sem pagamento confirmado"}</small></td>
+        <td><strong>${esc(c.name)}</strong>${c.role === "owner" ? ' <span class="chip">dono principal</span>' : c.role === "admin" ? ' <span class="chip">dono</span>' : ""}<small>${esc(c.email)}</small>${c.phone ? `<small>${esc(c.phone)}</small>` : ""}<small>${c.metrics.confirmed ? "Cliente confirmado" : "Sem pagamento confirmado"}</small></td>
         <td>${c.plan ? esc(plan(c.plan).name) : "—"}</td>
         <td>${st(c.status)}</td>
         <td>${d(c.since)}</td>
