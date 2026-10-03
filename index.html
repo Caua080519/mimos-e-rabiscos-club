@@ -8,6 +8,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito:wght@400;600;700&family=Chewy&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#dceffb">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mimos e Rabiscos Club">
+  <meta property="og:description" content="Clube de assinatura de papelaria: todo mês uma caixa com tema, produtos e surpresas.">
   <link rel="icon" href="assets/lapis.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -33,9 +37,10 @@
         <h1 id="hero-title"></h1>
         <p class="lead" id="hero-lead"></p>
         <div class="hero__cta">
-          <a class="btn" href="#boxes">Quero assinar</a>
-          <a class="btn btn--ghost" href="#como-funciona">Como funciona</a>
+          <a class="btn btn--lg" href="#boxes">Escolher minha Box</a>
+          <a class="btn btn--ghost btn--lg" href="#como-funciona">Como funciona</a>
         </div>
+        <ul class="hero__facts" id="hero-facts"></ul>
       </div>
       <div class="hero__art" aria-hidden="true">
         <div class="cloud cloud--a"></div>
@@ -76,6 +81,7 @@
         <p class="sub">Três jeitos de receber um mimo todo mês.</p>
       </header>
       <div class="plans" id="plans"></div>
+      <p class="reassure">Entrar na lista não gera cobrança. Avisamos você quando a primeira caixa estiver disponível.</p>
       <p class="note" id="shipping-note"></p>
     </div>
   </section>
@@ -86,6 +92,7 @@
         <p class="eyebrow">Lado a lado</p>
         <h2>Compare os planos</h2>
       </header>
+      <p class="swipe-hint">Deslize para o lado para ver tudo →</p>
       <div class="table-wrap"><table class="compare" id="compare"></table></div>
     </div>
   </section>
@@ -170,9 +177,9 @@
   <section class="cta">
     <div class="container">
       <span data-mascot></span>
-      <h2>Pronta para o seu primeiro mimo?</h2>
-      <p>Escolha sua Box e comece a colecionar.</p>
-      <a class="btn" href="#boxes">Escolher minha Box</a>
+      <h2>Que tal receber o seu primeiro mimo?</h2>
+      <p>Escolha sua Box, entre na lista e comece a colecionar selos no Passaporte.</p>
+      <a class="btn btn--lg" href="#boxes">Escolher minha Box</a>
     </div>
   </section>
 </main>
@@ -187,6 +194,8 @@
     <small>© <span id="year"></span> Mimos e Rabiscos. Todos os direitos reservados.</small>
   </div>
 </footer>
+
+<a class="sticky-cta" id="sticky-cta" href="#boxes" aria-hidden="true" tabindex="-1">Escolher minha Box</a>
 
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>

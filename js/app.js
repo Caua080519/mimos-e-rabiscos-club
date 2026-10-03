@@ -28,8 +28,13 @@
 
   // Hero + posicionamento
   $("hero-title").textContent = S.brand.tagline;
-  $("hero-lead").textContent =
-    "Todo mês uma caixa com produtos de papelaria, tema e surpresas chega até você.";
+  $("hero-lead").textContent = S.brand.heroLead;
+  const fromPrice = Math.min(...S.plans.map((p) => p.price));
+  $("hero-facts").innerHTML = [
+    `A partir de <strong>${brl(fromPrice)}</strong>/mês`,
+    "Uma caixa nova todo mês",
+    "Entrar na lista não gera cobrança",
+  ].map((t) => `<li>${t}</li>`).join("");
   $("statement").textContent = S.brand.positioning;
 
   // Passos
@@ -43,9 +48,11 @@
       (p) => `
     <article class="plan${p.highlight ? " plan--hl" : ""}">
       ${p.badge ? `<span class="plan__badge">${esc(p.badge)}</span>` : ""}
+      <div class="plan__art plan__art--${p.id}" aria-hidden="true">
+        <strong>${(p.items.match(/\d+/g) || []).join("–")}</strong><span>produtos</span>
+      </div>
       <h3>${esc(p.name)}</h3>
       <p class="plan__blurb">${esc(p.blurb)}</p>
-      <p class="plan__items">${esc(p.items)}</p>
       <p class="plan__price"><strong>${brl(p.price)}</strong><span>/mês</span></p>
       <ul>${p.benefits.map((b) => `<li>${tbd(b)}</li>`).join("")}</ul>
       <a class="btn${p.highlight ? "" : " btn--ghost"}" href="pre-assinatura.html?plano=${p.id}">Quero a ${esc(p.name)}</a>
@@ -154,6 +161,21 @@ $("shipping-note").textContent = S.itemsNote + " " + S.freeShippingNote;
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tear.classList.toggle("is-open"); }
     });
   }
+
+  // CTA fixo no celular: aparece depois do topo e some quando as Boxes estão na tela
+  const sticky = $("sticky-cta");
+  const boxesEl = $("boxes");
+  const updateSticky = () => {
+    const past = window.scrollY > 520;
+    const r = boxesEl.getBoundingClientRect();
+    const onBoxes = r.top < window.innerHeight * 0.7 && r.bottom > 0;
+    const show = past && !onBoxes;
+    sticky.classList.toggle("is-on", show);
+    sticky.setAttribute("aria-hidden", show ? "false" : "true");
+    sticky.tabIndex = show ? 0 : -1;
+  };
+  window.addEventListener("scroll", updateSticky, { passive: true });
+  updateSticky();
 
   // Entrada suave das seções ao rolar
   document.documentElement.classList.add("js");

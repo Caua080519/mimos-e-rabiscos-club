@@ -242,7 +242,7 @@ a { color: inherit; }
 
 /* Frase de posicionamento: maior, outra fonte, cores e faixa */
 /* Faixa de ponta a ponta atrás da frase. Para usar a fonte Porky's de verdade, coloque o arquivo em assets/fonts/Porkys.ttf */
-@font-face { font-family: "Porkys"; src: local("Porkys"), local("Porky's"), url("../assets/fonts/Porkys.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Porkys"; src: local("Porkys"), local("Porky's"); /* para usar o arquivo: acrescente , url("../assets/fonts/Porkys.ttf") format("truetype") */ font-display: swap; }
 .statement { padding: 72px 0; margin: 40px 0 0; position: relative; overflow: hidden;
   background: linear-gradient(100deg, #fbcfe0 0%, #e9dcfa 50%, #c6e4f8 100%); }
 .statement::before, .statement::after { content: "✦"; position: absolute; color: var(--gold); font-size: 1.6rem; opacity: .7; animation: twinkle 3s infinite; }
@@ -300,6 +300,55 @@ a { color: inherit; }
 /* Entrada ao rolar (só com JS ativo) */
 .js .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .8, .3, 1); }
 .js .reveal.in { opacity: 1; transform: none; }
+
+/* ===== Revisão: hero, Boxes, conversão e celular ===== */
+:focus-visible { outline: 3px solid var(--lilac-d); outline-offset: 3px; border-radius: 6px; }
+.btn--lg { padding: 1em 1.9em; font-size: 1.05rem; min-height: 52px; }
+.hero__text .lead { font-size: 1.15rem; max-width: 46ch; }
+.hero__facts { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-wrap: wrap; gap: 8px 10px; }
+.hero__facts li { background: rgba(255, 255, 255, .8); border: 1px solid var(--line); border-radius: 999px; padding: .35em .95em; font-size: .85rem; font-weight: 600; color: var(--muted); }
+.hero__facts strong { color: var(--ink); }
+
+/* Cards das Boxes: topo colorido com a quantidade de produtos */
+.plan { padding-top: 28px; }
+.plan__art { border-radius: 16px; padding: 18px 12px 14px; text-align: center; margin-bottom: 16px; position: relative; overflow: hidden; }
+.plan__art::after { content: "✦"; position: absolute; top: 8px; right: 12px; color: var(--gold); opacity: .8; font-size: .9rem; }
+.plan__art strong { display: block; font-family: var(--font-h); font-size: 2.2rem; line-height: 1; color: var(--ink); }
+.plan__art span { font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); opacity: .65; }
+.plan__art--mimobox { background: linear-gradient(135deg, #e3f1fc, #f2f8fd); }
+.plan__art--encantobox { background: linear-gradient(135deg, #fbd9e5, #f6e8ef); }
+.plan__art--dream-box { background: linear-gradient(135deg, #e7def7, #f4effb); }
+.plan h3 { font-size: 1.45rem; margin-bottom: .2em; }
+.plan li { font-size: .92rem; }
+.reassure { text-align: center; color: var(--ink); font-weight: 600; margin: 28px auto 0; max-width: 52ch; }
+.swipe-hint { display: none; text-align: center; font-size: .8rem; color: var(--muted); margin: 0 0 8px; }
+
+/* CTA fixo (só celular) */
+.sticky-cta { display: none; }
+
+@media (max-width: 760px) {
+  body { font-size: 16.5px; }
+  .section { padding: 56px 0; }
+  .section__head { margin-bottom: 28px; }
+  .hero { padding: 36px 0 52px; }
+  .hero__cta .btn { flex: 1 1 100%; }
+  .hero__art { height: 230px; }
+  .plan__badge { font-size: .66rem; }
+  .plans { gap: 28px; }
+  .swipe-hint { display: block; }
+  .compare th, .compare td { padding: 12px 12px; }
+  .burger { width: 44px; height: 44px; }
+  .menu-open .nav a { padding: .6em 0; font-size: 1.05rem; }
+  .faq summary { padding: 18px 0; min-height: 52px; }
+  .sticky-cta {
+    display: block; position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 30; text-align: center;
+    background: var(--ink); color: var(--white); text-decoration: none; font-weight: 700; padding: 1em; border-radius: 999px;
+    box-shadow: 0 10px 28px rgba(59, 53, 80, .35);
+    transform: translateY(140%); opacity: 0; transition: transform .4s ease, opacity .4s ease;
+  }
+  .sticky-cta.is-on { transform: none; opacity: 1; }
+  .footer { padding-bottom: 96px; }
+}
 
 /* Cabeçalho em telas pequenas */
 .logo { white-space: nowrap; min-width: 0; }

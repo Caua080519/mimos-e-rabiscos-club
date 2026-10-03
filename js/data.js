@@ -8,7 +8,8 @@ const SITE = {
     club: "Mimos e Rabiscos Club",
     tagline: "Todo mês, um mimo novo para rabiscar.",
     positioning:
-      "Uma caixa de papelaria que chega todo mês, com tema, carinho e surpresas, como um presente que você dá para si mesma.",
+      "Uma caixa de papelaria que chega todo mês, com tema, carinho e surpresas. Um presente que você dá para si.",
+    heroLead: "Assine e receba todo mês, na sua porta, uma caixa com produtos de papelaria escolhidos a dedo, um tema novo e surpresas.",
     domain: "mimoserabiscosclub.com.br",
   },
 
@@ -21,10 +22,10 @@ const SITE = {
   ],
 
   steps: [
-    { title: "Escolha sua Box", text: "Compare os planos e fique com o que combina com você." },
-    { title: "Defina a duração", text: "Assine mês a mês ou por mais tempo. Condições em definição." },
-    { title: "Receba em casa", text: "Todo mês chega uma caixa com produtos de papelaria, tema e surpresas." },
-    { title: "Colecione selos", text: "Cada Box recebida ganha um selo no Passaporte dos Mimos." },
+    { title: "Escolha sua Box", text: "Mimobox, Encantobox ou Dream Box: veja qual combina com você." },
+    { title: "Escolha a duração", text: "Mês a mês ou por mais tempo (condições em definição)." },
+    { title: "Receba em casa", text: "Todo mês chega uma caixa com tema, produtos de papelaria e surpresas." },
+    { title: "Colecione selos", text: "Cada Box recebida ganha um selo no seu Passaporte dos Mimos." },
   ],
 
   /* Nomes e quantidades são uma estrutura inicial, ainda a validar (custos, margem, frete). */
@@ -159,5 +160,6 @@ const SITE = {
     ],
   },
 };
+
 
 
