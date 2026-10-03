@@ -527,7 +527,7 @@ body.admin { background: var(--beige); }
 /* Quando o tema tem imagem, ela aparece inteira por baixo do papel (a arte já traz o título) */
 .tear__art--img > :not(.tear__spark):not(.glit) { visibility: hidden; }
 
-.theme__card.tear--wide { aspect-ratio: 16 / 9; max-width: 600px; }
+.theme__card.tear--wide { aspect-ratio: 16 / 9; max-width: 520px; }
 
 /* Parágrafos e quebras de linha escritos no painel aparecem do mesmo jeito no site */
 #theme-text { white-space: pre-line; }
@@ -537,8 +537,7 @@ body.admin { background: var(--beige); }
 @media (min-width: 1500px) { .container { width: min(1560px, 100% - 96px); } }
 @media (min-width: 1900px) { .container { width: min(1760px, 100% - 128px); } }
 .container.container--narrow { width: min(900px, 100% - 32px); }
-@media (min-width: 1200px) { .theme__card.tear--wide { max-width: 760px; } .hero__art { height: 440px; } }
-@media (min-width: 1500px) { html { font-size: 17px; } }
+@media (min-width: 1200px) { .hero__art { height: 440px; } }
 
 /* ===== Temas futuros (escolhidos no painel) ===== */
 .future--live { grid-template-columns: 1fr; gap: 20px; }

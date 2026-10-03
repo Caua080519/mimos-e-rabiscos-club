@@ -28,13 +28,19 @@
 
   /* ---------- entrada ---------- */
   async function start() {
+    try { await open(); } catch (err) {
+      console.error("painel:", err);
+      showGate("Não consegui abrir o painel agora. Recarregue a página (Ctrl+Shift+R) e entre de novo.");
+    }
+  }
+  async function open() {
     const user = await API.auth.currentUser();
     if (LIVE && !user) return showGate();
     if (LIVE && !(await API.admin.isAdmin())) {
       showGate("Esta conta não tem acesso ao painel dos donos. Entre com a conta de dono.");
       return;
     }
-    if (LIVE) { meInfo = await API.profile.me(); isOwner = !!meInfo && meInfo.role === "owner"; }
+    if (LIVE) { try { meInfo = await API.profile.me(); } catch (err) { meInfo = null; } isOwner = !!meInfo && meInfo.role === "owner"; }
     $("tab-owners-btn").hidden = !isOwner;
     $("gate").hidden = true;
     $("app").hidden = false;
@@ -70,18 +76,24 @@
   $("logo").addEventListener("click", (e) => { e.preventDefault(); if (!$("app").hidden) { goto("summary"); load(); } window.scrollTo({ top: 0, behavior: "smooth" }); });
 
   async function load() {
-    try {
-      [customers, themes] = await Promise.all([API.admin.customers(), API.admin.themes.list()]);
-      if (isOwner) [accounts, roleLog] = await Promise.all([API.owner.accounts(), API.owner.log()]);
-    } catch (err) {
-      toast("Não foi possível carregar os dados agora. Tente de novo em instantes.");
-      return;
-    }
-    renderAll();
+    // cada parte carrega sozinha: se uma falhar, as outras continuam aparecendo
+    const jobs = [
+      ["clientes", API.admin.customers(), (v) => { customers = v; }],
+      ["temas", API.admin.themes.list(), (v) => { themes = v; }],
+    ];
+    if (isOwner) jobs.push(["donos", API.owner.accounts(), (v) => { accounts = v; }], ["histórico de cargos", API.owner.log(), (v) => { roleLog = v; }]);
+    const res = await Promise.allSettled(jobs.map((j) => j[1]));
+    const bad = [];
+    res.forEach((r, i) => { if (r.status === "fulfilled") jobs[i][2](r.value); else { bad.push(jobs[i][0]); console.error("painel:", jobs[i][0], r.reason); } });
+    renderAll(bad);
   }
-  function renderAll() {
-    renderSummary(); renderCustomers(); renderOrders(); renderThemes(); renderPassportTable(); renderBadges();
-    if (isOwner) renderOwners();
+  function renderAll(bad) {
+    bad = bad || [];
+    [renderSummary, renderCustomers, renderOrders, renderThemes, renderPassportTable, renderBadges, isOwner ? renderOwners : null].forEach((fn) => {
+      if (!fn) return;
+      try { fn(); } catch (err) { console.error("painel:", fn.name, err); bad.push(fn.name.replace("render", "").toLowerCase()); }
+    });
+    if (bad.length) toast("Algumas partes não carregaram (" + [...new Set(bad)].join(", ") + "). Recarregue com Ctrl+Shift+R; se continuar, me avise.");
   }
 
   /* ---------- barra lateral ---------- */
