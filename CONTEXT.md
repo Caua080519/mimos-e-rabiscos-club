@@ -28,7 +28,9 @@ Fidelidade físico: a primeira compra dá direito ao passaporte; cada Box recebi
 - [x] Etapa 5: Painel com abas Resumo, Clientes, Envios, Temas, Passaportes (PROTÓTIPO); `js/services/api.js`; `docs/arquitetura.md`.
 - [x] Login de clientes: `entrar.html` (Entrar, Criar conta, Esqueci a senha) + Área do cliente por sessão. PROTÓTIPO: só a conta de DEMONSTRAÇÃO funciona; link "Entrar" no menu. Área mostra caixas pagas/recebidas, última caixa, frequência, andamento da entrega, pagamentos e imagem do passaporte (baixável em PNG).
 - [ ] Passaporte digital real: registro oficial de selos no servidor + código impossível de adivinhar (ver docs/arquitetura.md). Hoje só demonstração (`MR-DEMO-000X`).
-- [ ] Servidor com login + banco de dados + gateway de pagamento: ainda não existe; é o próximo grande passo.
+- [x] Supabase ligado (projeto mimos-e-rabiscos-club, sa-east-1): login real de clientes, banco com RLS (supabase/001_init_schema.sql). `SITE.auth.mode = "live"`.
+- [ ] Pendente do usuário no painel do Supabase: Authentication > URL Configuration (Site URL e Redirect URLs); depois criar a própria conta e me avisar para virar admin.
+- [ ] Painel dos donos com dados reais + login de admin; gateway de pagamento; passaporte/selos reais pelo painel.
 - [ ] Ajustes de visual com o usuário
 - [ ] Checkout simulado em 7 etapas (Box, duração, conta, endereço, pagamento, revisão, confirmação)
 - [ ] Área do assinante (plano, próxima cobrança, envio, passaporte, histórico, cupons, cancelamento)

@@ -186,6 +186,10 @@
     if (!user) { location.replace("entrar.html"); return; }
     const c = await API.customers.get(user.id);
     if (!c) { await API.auth.signOut(); location.replace("entrar.html"); return; }
+    if (!c.demo) {
+      const b = document.querySelector(".proto-banner");
+      if (b) b.innerHTML = "<strong>Sua conta.</strong> Aqui você acompanha suas caixas, pagamentos e o seu Passaporte dos Mimos. Alterar plano, endereço ou forma de pagamento e cancelar ainda estão sendo preparados: por enquanto, fale com a gente.";
+    }
     render(c);
   })();
 })();

@@ -8,7 +8,23 @@
   const msg = (t, good) => { const m = $("login-msg"); m.textContent = t; m.hidden = !t; m.style.color = good ? "#25683b" : ""; };
 
   // Já está logado (sessão de demonstração)? Vai direto para a área.
-  API.auth.currentUser().then((u) => { if (u) location.replace("conta.html"); });
+  // Vindo do link de recuperação de senha? Mostra o formulário de nova senha em vez de ir para a área.
+  const recovering = /type=recovery/.test(location.hash);
+  const showNewPassword = () => {
+    $("form-in").hidden = true; $("form-up").hidden = true; $("login-tabs").hidden = true; $("form-new").hidden = false; msg("");
+  };
+  if (recovering) showNewPassword();
+  API.auth.onPasswordRecovery(showNewPassword);
+  API.auth.currentUser().then((u) => { if (u && !recovering) location.replace("conta.html"); });
+
+  $("form-new").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const f = e.target;
+    if (f.password.value.length < 8) return msg("A senha precisa ter pelo menos 8 caracteres.");
+    const r = await API.auth.updatePassword(f.password.value);
+    f.password.value = "";
+    if (r.ok) location.href = "conta.html"; else msg(r.message);
+  });
 
   $("login-tabs").addEventListener("click", (e) => {
     const b = e.target.closest("button[data-pane]");
@@ -40,7 +56,9 @@
     if (!f.consent.checked) return msg("Marque a caixa para continuar.");
     const r = await API.auth.signUp({ name: f.name.value.trim(), email: f.email.value.trim(), password: f.password.value });
     f.password.value = "";
-    if (r.ok) location.href = "conta.html"; else msg(r.message);
+    if (r.ok && r.confirm) { e.target.reset(); msg(r.message, true); }
+    else if (r.ok) location.href = "conta.html";
+    else msg(r.message);
   });
 
   $("btn-forgot").addEventListener("click", async () => {

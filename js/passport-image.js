@@ -26,7 +26,7 @@ const PassportImage = (function () {
   <text x="${W / 2}" y="240" text-anchor="middle" font-family="Courier New,monospace" font-size="13" letter-spacing="1" fill="#7a7490">${esc(c.passportCode || "—")}</text>
   ${stamps}
   <text x="${W / 2}" y="${H - 34}" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#5a3f9a">${have.size} de ${total} selos</text>
-  <text x="${W / 2}" y="${H - 18}" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#7a7490">Mimos e Rabiscos Club · demonstração</text>
+  <text x="${W / 2}" y="${H - 18}" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#7a7490">Mimos e Rabiscos Club${c.demo ? " · demonstração" : ""}</text>
 </svg>`;
   }
 

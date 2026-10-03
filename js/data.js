@@ -91,7 +91,15 @@ const SITE = {
   /* Login de clientes. "prototype" = ainda não há servidor: o formulário avisa isso e só a conta de
      DEMONSTRAÇÃO funciona. Quando o login real existir (docs/arquitetura.md), troque para "live"
      e o botão de demonstração some. */
-  auth: { mode: "prototype" },
+  auth: {
+    mode: "live", // "prototype" = só a conta de demonstração; "live" = login real pelo Supabase
+    // A chave "publishable" é pública POR DESIGN: ela só abre o que as regras de segurança (RLS) do banco permitem.
+    // NUNCA coloque aqui a chave secreta (service_role / sb_secret_...).
+    supabase: {
+      url: "https://qrhpahmgcgimmrmlfdcj.supabase.co",
+      key: "sb_publishable_myimx-eYbU4lU7D8Y0keDg_Tv4yqIc5",
+    },
+  },
 
   freeShippingNote: "*Frete grátis em avaliação. Condições em definição.",
 

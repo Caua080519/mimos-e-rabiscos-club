@@ -24,6 +24,8 @@
 
 - 2026-10-03 — Usuário disse que a ÁREA DE LOGIN é super importante: cliente entra e vê suas caixas, pagamentos, entrega, frequência e imagem do passaporte. Front-end pronto (entrar.html + conta.html); login REAL depende de servidor (Supabase/Firebase). Nunca simular login que aceite qualquer senha; `SITE.auth.mode` controla a demo.
 
+- 2026-10-03 — Usuário criou conta no Supabase; criei o projeto (id qrhpahmgcgimmrmlfdcj, org gomtbwmdgfnwtotpkuet) e o schema com RLS. Só a chave publishable está no site. NUNCA pôr a chave secreta no repo. Não criar contas de teste no Auth (regra: sem criar contas fora de localhost); quem testa o cadastro é o usuário.
+
 ## Preferências do usuário
 - Fala português. Quer ver o resultado ao lado e ajustar aos poucos, então iterar em passos curtos.
 - Arquivos de memória do Code são separados dos do Cowork.
