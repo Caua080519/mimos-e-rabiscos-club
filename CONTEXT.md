@@ -14,7 +14,8 @@ Fidelidade físico: a primeira compra dá direito ao passaporte; cada Box recebi
 - [x] Base do projeto e `CLAUDE.md`/`CONTEXT.md`/`MEMORY.md`
 - [x] Home v1 (todas as seções, conteúdo placeholder)
 - [x] Cabeçalho corrigido para telas pequenas
-- [x] `pre-assinatura.html` (lista de espera, sem cobrança; salva só no navegador via localStorage)
+- [x] `assinar.html` + `js/checkout.js`: escolha da Box e botão "Ir para o pagamento" (Pix e cartão). Os links de pagamento ficam em `SITE.payment.links` (js/data.js); vazios = botão desativado com aviso. A antiga pré-assinatura/lista de espera foi removida.
+- [ ] Ideia em maturação: captar e-mail de quem ainda não pagou para lembrar de comprar (precisa de banco/serviço de e-mail). NÃO implementar até o usuário decidir.
 - [x] Logo do topo volta ao início sem recarregar (home)
 - [x] `admin.html`: painel dos donos (protótipo, dados só no localStorage, sem login). Mostra cliente, box, nº da compra, endereço, o que colocar na caixa (passaporte na 1ª, selo nas demais), status e rastreio, mais a lista de espera.
 - [ ] Painel real: precisa de banco de dados + login (ex.: Supabase/Firebase) e dos pedidos chegando de verdade

@@ -78,6 +78,16 @@ const SITE = {
   ],
 
   itemsNote: "Quantidade de produtos é uma estimativa inicial, ainda em validação.",
+  /* Pagamento: cole aqui o link de pagamento de cada Box (Mercado Pago, InfinitePay etc.).
+     Vazio = o botão fica desativado e a página avisa que o pagamento ainda não está ativo. */
+  payment: {
+    links: {
+      mimobox: "",
+      encantobox: "",
+      "dream-box": "",
+    },
+  },
+
   freeShippingNote: "*Frete grátis em avaliação. Condições em definição.",
 
   /* Linhas da tabela comparativa. Use true/false, texto ou TBD */

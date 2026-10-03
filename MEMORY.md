@@ -6,7 +6,8 @@
 - 2026-10-03 — Usuário colou um briefing novo e escolheu: nome "Mimos e Rabiscos Club", domínio mimoserabiscosclub.com.br, planos Mimobox / Encantobox / Dream Box com 4-6 / 8-10 / 12-15 produtos (estimativa a validar). Substitui "Mimo & Rabiscos" e os placeholders "Box 1/2/3".
 - 2026-10-03 — Projeto em `Documentos/mimo-e-rabiscos-club`.
 
-- 2026-10-03 — Caminho enxuto aprovado: pré-assinatura (lista de espera) no lugar do checkout de 7 etapas por enquanto. Os botões dos planos levam a `pre-assinatura.html?plano=id`. Cadastros ficam só no localStorage até existir destino real (e-mail, planilha ou WhatsApp em `SITE.footer.whatsappNumber`).
+- 2026-10-03 — Pré-assinatura/lista de espera REMOVIDA a pedido do usuário. Agora os botões das Boxes levam a `assinar.html?plano=id` (pagamento por Pix e cartão via link de pagamento, ex. Mercado Pago, em `SITE.payment.links`). Só deve entrar no painel quem pagou, o que exige banco de dados + login (ainda não existe). Não prometer cobrança real antes disso.
+- 2026-10-03 — Usuário quer amadurecer a ideia de coletar e-mail de quem não comprou e mandar lembretes. Não implementar ainda; discutir antes.
 
 - 2026-10-03 — Painel dos donos (usuário + pais) pedido: ver quem comprou, endereço, box, nº da compra (1ª, 2ª...) e o que colocar na caixa. Feito como protótipo em `admin.html`/`js/admin.js` com dados de exemplo. Não expor dados reais de clientes sem login e banco de dados.
 

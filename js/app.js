@@ -49,7 +49,7 @@
       <p class="plan__blurb">${esc(p.blurb)}</p>
       <p class="plan__price"><strong>${brl(p.price)}</strong><span>/mês</span></p>
       <ul>${p.benefits.map((b) => `<li>${tbd(b)}</li>`).join("")}</ul>
-      <a class="btn${p.highlight ? "" : " btn--ghost"}" href="pre-assinatura.html?plano=${p.id}">Quero a ${esc(p.name)}</a>
+      <a class="btn${p.highlight ? "" : " btn--ghost"}" href="assinar.html?plano=${p.id}">Assinar ${esc(p.name)}</a>
     </article>`
     )
     .join("");

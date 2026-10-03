@@ -3,7 +3,6 @@
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const brl = (n) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   const KEY = "mrc_orders";
-  const WL = "mrc_waitlist";
   const STATUS = ["A preparar", "Em preparação", "Enviado", "Entregue"];
   const ordinal = (n) => `${n}ª caixa`;
 
@@ -58,11 +57,6 @@
     $("orders").innerHTML = list.length
       ? list.map(card).join("")
       : `<p class="adm-empty">Nenhum envio por aqui ainda. Use "Carregar exemplos" para ver como fica.</p>`;
-
-    const wl = load(WL);
-    $("waitlist").innerHTML = wl.length
-      ? wl.map((w) => `<article class="adm-card"><h3>${esc(w.name)}</h3><p>${esc(w.email)}${w.phone ? " · " + esc(w.phone) : ""}</p><p><span class="chip">${esc(w.plan)}</span> <span class="chip">${esc(w.duration)}</span> <small>${new Date(w.at).toLocaleDateString("pt-BR")}</small></p></article>`).join("")
-      : `<p class="adm-empty">Ninguém na lista de espera neste navegador.</p>`;
   }
 
   function card(o) {
@@ -106,13 +100,6 @@
     if (confirm("Apagar todos os envios guardados neste navegador?")) { orders = []; save(KEY, orders); render(); }
   });
 
-  document.querySelectorAll(".adm-tabs button").forEach((b) =>
-    b.addEventListener("click", () => {
-      document.querySelectorAll(".adm-tabs button").forEach((x) => x.classList.toggle("is-on", x === b));
-      $("tab-orders").hidden = b.dataset.tab !== "orders";
-      $("tab-waitlist").hidden = b.dataset.tab !== "waitlist";
-    })
-  );
 
   // Clicar em "Painel dos donos" atualiza o painel (relê os dados) e volta ao topo, sem sair da página
   $("logo").addEventListener("click", (e) => {
