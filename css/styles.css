@@ -338,6 +338,16 @@ a { color: inherit; }
   .swipe-hint { display: block; }
   .compare th, .compare td { padding: 12px 12px; }
   .burger { width: 44px; height: 44px; }
+  .btn--small { min-height: 40px; display: inline-flex; align-items: center; justify-content: center; }
+  .logo { min-height: 44px; }
+  .footer__links a { display: inline-block; padding: .7em .4em; margin: 0 -.4em; }
+  .plan__badge { font-size: .72rem; }
+  /* Tabela comparativa: a coluna dos itens fica fixa ao rolar para o lado */
+  .compare tbody th { position: sticky; left: 0; background: var(--white); z-index: 1; box-shadow: 1px 0 0 var(--line); min-width: 132px; }
+  .compare thead th:first-child { position: sticky; left: 0; background: var(--beige); z-index: 1; }
+  /* Menu aberto: botões e links confortáveis para o toque */
+  .menu-open .nav { max-height: calc(100vh - 68px); overflow-y: auto; }
+  .menu-open .nav a { display: block; }
   .menu-open .nav a { padding: .6em 0; font-size: 1.05rem; }
   .faq summary { padding: 18px 0; min-height: 52px; }
   .sticky-cta {
@@ -348,6 +358,16 @@ a { color: inherit; }
   }
   .sticky-cta.is-on { transform: none; opacity: 1; }
   .footer { padding-bottom: 96px; }
+}
+
+/* Tablet (761–879px): cards das Boxes não esticam e os passos ficam 2 por linha */
+@media (min-width: 761px) and (max-width: 879px) {
+  .plans { max-width: 520px; margin-inline: auto; gap: 28px; }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+}
+/* Monitor grande: um pouco mais de respiro no conteúdo */
+@media (min-width: 1500px) {
+  .container { width: min(1240px, 100% - 64px); }
 }
 
 /* Cabeçalho em telas pequenas */

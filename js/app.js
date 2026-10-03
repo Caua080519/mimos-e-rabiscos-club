@@ -14,10 +14,18 @@
     const open = document.body.classList.toggle("menu-open");
     burger.setAttribute("aria-expanded", open);
   });
-  $("nav").addEventListener("click", () => {
+  const closeMenu = () => {
     document.body.classList.remove("menu-open");
     burger.setAttribute("aria-expanded", "false");
-  });
+    burger.setAttribute("aria-label", "Abrir menu");
+  };
+  burger.setAttribute("aria-controls", "nav");
+  burger.addEventListener("click", () => burger.setAttribute("aria-label", document.body.classList.contains("menu-open") ? "Fechar menu" : "Abrir menu"));
+  $("nav").addEventListener("click", closeMenu);
+  // Fecha o menu ao tocar fora dele, ao apertar Esc ou ao voltar para a tela larga
+  document.addEventListener("click", (e) => { if (!e.target.closest(".header")) closeMenu(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeMenu(); burger.focus(); } });
+  window.matchMedia("(min-width: 880px)").addEventListener("change", closeMenu);
 
   // Logo: volta ao topo sem recarregar (o header é sticky, então #top não rola até o início)
   document.querySelector(".logo").addEventListener("click", (e) => {

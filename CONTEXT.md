@@ -23,6 +23,8 @@ Fidelidade físico: a primeira compra dá direito ao passaporte; cada Box recebi
 - [x] Home dinâmica: mascote inline que sorri, caixa do hero que abre, frase em Caveat com faixa colorida, cards que crescem no hover (Como funciona, Boxes, Unboxing, Temas futuros, Momentos, FAQ), tema do mês com papel que rasga (hover/toque/teclado), entrada suave ao rolar. Respeita prefers-reduced-motion.
 - [x] Revisão geral (2026-10-03): hero com preço e CTA "Escolher minha Box", cards das Boxes com faixa colorida de quantidade, CTA fixo no celular, textos revisados, foco visível, metas OG. Preços, nomes e quantidades dos planos NÃO foram alterados.
 - [x] Publicado: repositório Caua080519/mimos-e-rabiscos-club (GitHub Pages), com `admin.html`. Atualizações: commit aqui + "Push origin" no GitHub Desktop.
+- [x] Etapas 1-3 da revisão (SEO/desempenho, landing, responsividade) feitas em commits separados. robots.txt, sitemap.xml e 404.html criados; URLs usam o domínio do GitHub Pages e devem ser trocadas quando o domínio próprio estiver ativo.
+- [ ] Etapa 4 (área do cliente `conta.html`, protótipo) e etapa 5 (painel melhorado + `js/services/` + `docs/arquitetura.md`): aguardando aprovação do usuário depois de ele revisar as etapas 1-3.
 - [ ] Ajustes de visual com o usuário
 - [ ] Checkout simulado em 7 etapas (Box, duração, conta, endereço, pagamento, revisão, confirmação)
 - [ ] Área do assinante (plano, próxima cobrança, envio, passaporte, histórico, cupons, cancelamento)
