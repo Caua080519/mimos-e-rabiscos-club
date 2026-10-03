@@ -25,7 +25,7 @@
 </header>
 
 <main class="container adm">
-  <!-- Entrada: só dono (cargo "admin" no banco). A proteção real é do banco, não desta tela. -->
+  <!-- Entrada: só dono (cargo "admin" ou "owner" no banco). A proteção real é do banco, não desta tela. -->
   <section id="gate" class="card gate" hidden>
     <h1 class="h1-s">Entrar no painel</h1>
     <p class="sub">Acesso só para os donos.</p>
@@ -37,27 +37,58 @@
     <p class="error" id="gate-msg" role="alert" hidden></p>
   </section>
 
-  <div id="app" hidden>
+<div id="app" hidden>
+  <div class="adm-layout">
+    <aside class="sidebar" id="sidebar" aria-label="Ferramentas do painel">
+      <div class="sidebar__who" id="side-who"></div>
+      <nav id="tabs" role="tablist" aria-label="Ferramentas">
+        <button role="tab" class="is-on" data-tab="summary"><i aria-hidden="true">📊</i><span>Resumo</span></button>
+        <button role="tab" data-tab="customers"><i aria-hidden="true">👥</i><span>Clientes</span><b class="badge" id="b-customers" hidden></b></button>
+        <button role="tab" data-tab="orders"><i aria-hidden="true">📦</i><span>Envios</span><b class="badge" id="b-orders" hidden></b></button>
+        <button role="tab" data-tab="themes"><i aria-hidden="true">🎨</i><span>Temas</span><b class="badge" id="b-themes" hidden></b></button>
+        <button role="tab" data-tab="passports"><i aria-hidden="true">🛂</i><span>Passaportes</span></button>
+        <button role="tab" data-tab="files"><i aria-hidden="true">🖼️</i><span>Arquivos</span></button>
+        <button role="tab" data-tab="assistant"><i aria-hidden="true">💬</i><span>Assistente</span></button>
+        <button role="tab" data-tab="owners" id="tab-owners-btn" hidden><i aria-hidden="true">🔑</i><span>Donos</span></button>
+      </nav>
+      <div class="sidebar__foot">
+        <a href="index.html"><i aria-hidden="true">🏠</i><span>Voltar ao site</span></a>
+        <button type="button" id="side-out"><i aria-hidden="true">🚪</i><span>Sair da conta</span></button>
+      </div>
+    </aside>
+    <div class="adm-main">
     <div class="adm-warn" role="note" id="adm-banner"></div>
     <p class="error" id="toast" role="alert" hidden></p>
 
-    <div class="adm-tabs" role="tablist" id="tabs">
-      <button role="tab" class="is-on" data-tab="summary">Resumo</button>
-      <button role="tab" data-tab="customers">Clientes</button>
-      <button role="tab" data-tab="orders">Envios</button>
-      <button role="tab" data-tab="themes">Temas</button>
-      <button role="tab" data-tab="passports">Passaportes</button>
-      <button role="tab" data-tab="owners" id="tab-owners-btn" hidden>Donos</button>
-      <button class="btn btn--small btn--ghost" id="btn-refresh" type="button">Atualizar</button>
-    </div>
 
-    <!-- RESUMO -->
+    <!-- RESUMO (interativo: clique nos números e nos gráficos para ir direto aos detalhes) -->
     <section id="tab-summary" role="tabpanel">
-      <div class="kpis" id="kpis"></div>
+      <div class="sum-hello"><h1 class="h1-s" id="sum-hello">Resumo</h1><p class="acc-muted" id="sum-date"></p></div>
+      <div class="kpis kpis--click" id="kpis"></div>
+
+      <div class="sum-grid">
+        <section class="sum-card">
+          <h2 class="adm-sub">Caixas do mês</h2>
+          <p class="acc-muted">Clique numa etapa para ver as caixas dela.</p>
+          <div class="pipeline" id="pipeline"></div>
+        </section>
+        <section class="sum-card">
+          <h2 class="adm-sub">Clientes por situação</h2>
+          <div class="donut-wrap">
+            <div class="donut" id="donut" role="img" aria-label="Distribuição dos clientes por situação"><span id="donut-total"></span></div>
+            <ul class="legend" id="legend"></ul>
+          </div>
+        </section>
+        <section class="sum-card">
+          <h2 class="adm-sub">Assinantes ativos por Box</h2>
+          <div class="bars" id="plan-bars"></div>
+        </section>
+      </div>
+
       <h2 class="adm-sub">Próximos envios</h2>
       <ul class="next-list" id="next-list"></ul>
       <h2 class="adm-sub">Frequência dos clientes</h2>
-      <div class="kpis" id="freq"></div>
+      <div class="kpis kpis--click" id="freq"></div>
     </section>
 
     <!-- CLIENTES -->
@@ -81,7 +112,7 @@
     <section id="tab-orders" role="tabpanel" hidden>
       <div class="adm-stats" id="stats"></div>
       <div class="adm-filters">
-        <label>Status <select id="f-status"><option value="">Todos</option></select></label>
+        <label>Status <select id="f-status"><option value="">Todos</option><option value="__late">Atrasados</option></select></label>
         <label>Box <select id="f-plan"><option value="">Todas</option></select></label>
         <label>Buscar <input id="f-q" type="search" placeholder="Nome ou cidade"></label>
       </div>
@@ -92,20 +123,30 @@
     <section id="tab-themes" role="tabpanel" hidden>
       <p class="adm-hint" id="themes-hint"></p>
       <p class="adm-warn" id="themes-pending" role="status" hidden></p>
+
+      <details class="ideas" id="ideas-box">
+        <summary>💡 Ideias de temas em alta <small>(clique para abrir)</small></summary>
+        <p class="adm-hint">Baseadas em pesquisas de tendências de papelaria de 2026 (não são uma busca ao vivo do Google). Cada ideia já vem com descrição e produtos na forma de escrita de vocês. Clique em <strong>Usar esta ideia</strong> para preencher o formulário abaixo.</p>
+        <div class="ideas__grid" id="ideas-grid"></div>
+        <p class="acc-muted">Fontes: ABCasa Fair 2026, blog Tilibra Express, Revista da Papelaria, Cratejoy e StationeryHQ.</p>
+      </details>
+
       <form class="theme-form" id="theme-form" novalidate>
         <input type="hidden" name="id">
         <label>Nome do tema <input name="name" type="text" required></label>
-        <label>Descrição <textarea name="description" placeholder="Pode deixar em branco: o painel sugere uma descrição bonitinha"></textarea></label>
+        <label>Descrição <textarea name="description" placeholder="Pode deixar em branco: o painel sugere uma descrição na forma de escrita de vocês"></textarea></label>
         <label>Produtos (um por linha) <textarea name="products" placeholder="Um produto por linha. Pode deixar em branco: o painel sugere ideias"></textarea></label>
         <div class="theme-form__btns"><button class="btn btn--small btn--ghost" type="button" id="sug-btn">Sugerir descrição e produtos</button></div>
         <p class="acc-muted" id="sug-msg" role="status" hidden></p>
         <label>Imagem (endereço) <input name="image" type="text" id="art-url" placeholder="Use os botões abaixo ou cole um endereço"></label>
         <div class="theme-art">
           <div class="theme-form__btns">
-            <button class="btn btn--small" type="button" id="art-gen">Criar arte com o nome e a descrição</button>
+            <button class="btn btn--small" type="button" id="art-gen">Criar arte simples com o nome</button>
             <label class="btn btn--small btn--ghost" for="art-file">Enviar minha imagem</label>
             <input id="art-file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+            <button class="btn btn--small btn--ghost" type="button" id="art-lib">Escolher da biblioteca</button>
           </div>
+          <p class="acc-muted">A arte bonita de cada tema é feita pelo Claude (avise "tem tema novo"). Imagens 16:9 ficam perfeitas.</p>
           <p class="acc-muted" id="art-msg" role="status" hidden></p>
           <img id="art-preview" alt="Prévia da imagem do tema" width="1400" height="788" hidden>
         </div>
@@ -116,7 +157,13 @@
           <button class="btn btn--small btn--ghost" type="button" id="theme-reset">Limpar formulário</button>
         </div>
       </form>
+
       <div id="theme-preview"></div>
+
+      <div class="vis-bar" id="vis-bar">
+        <p><strong id="vis-count">0 de 4</strong> temas aparecendo na seção "Temas futuros" do site.</p>
+        <button class="btn btn--small btn--ghost" type="button" id="vis-draw">🎲 Sortear 4 temas</button>
+      </div>
       <h2 class="adm-sub">Temas cadastrados</h2>
       <div class="adm-list" id="theme-list"></div>
     </section>
@@ -135,6 +182,37 @@
       <h2 class="adm-sub">Registro de selos por cliente</h2>
       <div class="adm-table-wrap"><table class="adm-table" id="p-table"></table></div>
     </section>
+
+    <!-- ARQUIVOS (biblioteca de imagens do site) -->
+    <section id="tab-files" role="tabpanel" hidden>
+      <p class="adm-hint">Envie aqui as imagens do site (temas, produtos, fotos). Cada arquivo ganha um endereço que você pode copiar e usar nos temas. Aceita JPG, PNG, WEBP e GIF de até 3 MB.</p>
+      <div class="files-up">
+        <label class="btn" for="files-input">Enviar imagens</label>
+        <input id="files-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+        <p class="acc-muted" id="files-msg" role="status" hidden></p>
+      </div>
+      <div class="default-box" id="default-box"></div>
+      <div class="files-grid" id="files-grid"></div>
+    </section>
+
+    <!-- ASSISTENTE (ChatGPT) -->
+    <section id="tab-assistant" role="tabpanel" hidden>
+      <div class="asst-head">
+        <div><h2 class="adm-sub" style="margin:0">Assistente de apoio (ChatGPT)</h2><p class="acc-muted" id="asst-who"></p></div>
+        <div class="theme-form__btns">
+          <button class="btn btn--small btn--ghost" type="button" id="asst-new">Nova conversa</button>
+          <button class="btn btn--small btn--ghost btn--danger" type="button" id="asst-out">Sair da conta</button>
+        </div>
+      </div>
+      <p class="adm-hint" id="asst-hint"></p>
+      <div class="chat" id="chat" aria-live="polite"></div>
+      <form class="chat__form" id="chat-form" novalidate>
+        <textarea id="chat-input" rows="2" maxlength="2000" placeholder="Pergunte algo: ideias de tema, texto para o Instagram, como usar o painel..." required></textarea>
+        <button class="btn" type="submit" id="chat-send">Enviar</button>
+      </form>
+      <p class="acc-muted">Dica: não cole nomes, endereços, telefones ou pagamentos de clientes aqui. As conversas não ficam guardadas.</p>
+    </section>
+
     <!-- DONOS (só dono principal) -->
     <section id="tab-owners" role="tabpanel" hidden>
       <p class="adm-hint"><strong>Quem é dono?</strong> <em>Dono</em> usa o painel (clientes, pagamentos, caixas). <em>Dono principal</em> faz isso e também decide quem é dono ou dono principal. O máximo é <strong>3 donos principais</strong> e sempre precisa existir pelo menos 1.</p>
@@ -144,7 +222,17 @@
       <h2 class="adm-sub">Últimas mudanças de cargo</h2>
       <ul class="next-list" id="o-log"></ul>
     </section>
+    </div>
   </div>
+</div>
+
+  <dialog class="modal modal--wide" id="lib-modal">
+    <form method="dialog">
+      <h2>Escolher da biblioteca</h2>
+      <div class="files-grid files-grid--pick" id="lib-grid"></div>
+      <button class="btn btn--ghost" value="x">Fechar</button>
+    </form>
+  </dialog>
 </main>
 
 <script src="js/data.js"></script>
@@ -152,6 +240,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
 <script src="js/services/api.js"></script>
 <script src="js/theme-art.js"></script>
+<script src="js/theme-ideas.js"></script>
 <script src="js/admin.js"></script>
 <script src="js/menu.js"></script>
 </body>

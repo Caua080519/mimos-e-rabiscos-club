@@ -103,24 +103,37 @@ const ThemeArt = (function () {
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc("Arte do tema " + title)}">${out}</svg>`;
   }
 
-  /* ---------- Sugestões de descrição e produtos (por assunto) ---------- */
+  /* ---------- Sugestões de descrição e produtos ----------
+     SEMPRE na mesma forma de escrita das donas (modelo "Noite Estrelada" / "Jardim Encantado"):
+       linha 1: uma frase curta e poética sobre o tema;
+       linha 2: "A caixa deste mês traz uma seleção especial de itens de papelaria inspirados em ... Tudo pensado para ... " + emojis.
+     Produtos: um por linha, começando com "- ". São só IDEIAS (sem preço, quantidade ou prazo). */
+  const PURPOSES = [
+    "transformar seus momentos de estudo, organização e criatividade em uma experiência ainda mais especial",
+    "trazer um toque de magia e aconchego aos seus momentos de estudo, organização e criatividade",
+    "criar uma atmosfera leve e gostosa enquanto você estuda, se organiza ou coloca suas ideias no papel",
+  ];
+  function compose({ hook, elements, emojis, purpose }) {
+    return `${hook}\nA caixa deste mês traz uma seleção especial de itens de papelaria inspirados em ${elements}. Tudo pensado para ${purpose || PURPOSES[0]}. ${emojis}`;
+  }
+  const dash = (arr) => arr.map((x) => "- " + x).join("\n");
   const IDEAS = {
-    jardim: { d: "Um cantinho mágico onde a criatividade floresce.\n\nFlores, luz dourada e pequenos segredos esperam por você neste mês.", p: ["Caderneta com capa floral", "Adesivos de flores e borboletas", "Canetas em tons pastel", "Marca-textos suaves", "Washi tape botânica", "Cartão com mensagem de carinho"] },
-    noite: { d: "Uma caixa para sonhar de olhos abertos.\n\nLua, estrelas e uma pitada de magia para os seus planos do mês.", p: ["Caderneta de capa azul-noite", "Adesivos de lua e estrelas", "Caneta com tinta prateada ou dourada", "Marca-textos pastel", "Washi tape estrelado", "Cartão com frase para sonhar"] },
-    mar: { d: "Brisa, sol e areia dentro de uma caixa.\n\nUm mês leve, com cara de férias, para anotar tudo que você quer viver.", p: ["Bloquinho tema praia", "Adesivos de conchas e ondas", "Canetas em tons de mar", "Marca-textos coloridos", "Washi tape ondas", "Cartão com mensagem de verão"] },
-    outono: { d: "Tons quentes e um clima aconchegante.\n\nUma caixa para planejar o mês com café, folhas douradas e muito carinho.", p: ["Caderneta em tons terrosos", "Adesivos de folhas e xícaras", "Canetas em cores quentes", "Marca-textos suaves", "Washi tape folhas", "Cartão com mensagem acolhedora"] },
-    natal: { d: "O clima de festa chegando na sua mesa de estudos.\n\nBrilho, carinho e pequenos presentes para fechar o ano.", p: ["Agenda ou caderneta de fim de ano", "Adesivos natalinos", "Canetas vermelhas e verdes", "Marca-textos pastel", "Washi tape festivo", "Cartão para presentear"] },
-    escola: { d: "Organização com personalidade para o seu ano.\n\nPlanejar, estudar e criar ficam muito mais gostosos com a papelaria certa.", p: ["Planner ou caderno de estudos", "Adesivos de organização", "Canetas coloridas", "Marca-textos", "Post-its decorados", "Régua ou marcador de páginas"] },
-    doce: { d: "Uma caixa tão fofa que dá vontade de guardar.\n\nCoraçõezinhos, cores doces e muito carinho em cada detalhe.", p: ["Caderneta fofa", "Adesivos de doces e corações", "Canetas coloridas", "Marca-textos pastel", "Washi tape doce", "Cartão com recado carinhoso"] },
-    arco: { d: "Um mês cheio de cor e alegria.\n\nCada item combina com o próximo para colorir o seu caderno.", p: ["Caderneta colorida", "Adesivos arco-íris", "Conjunto de canetas coloridas", "Marca-textos", "Washi tape colorida", "Cartão com mensagem alegre"] },
+    jardim: { hook: "Um cantinho mágico onde a criatividade floresce.", elements: "flores, cores suaves, natureza e pequenos detalhes encantadores", emojis: "🌷✨", products: ["Caderneta com capa floral", "Adesivos de flores e borboletas", "Canetas em tons pastel", "Marca-textos suaves", "Washi tape botânica", "Cartão com mensagem de carinho"] },
+    noite: { hook: "Uma noite onde a imaginação pode ir muito além.", elements: "lua, estrelas, constelações e no céu noturno", emojis: "🌙✨", products: ["Caderneta azul-noite", "Adesivos de lua e estrelas", "Caneta com tinta dourada ou prateada", "Marca-textos pastel", "Washi tape estrelado", "Cartão com frase para sonhar"] },
+    mar: { hook: "Um mergulho leve no azul, com cara de férias.", elements: "ondas, conchas, sol e areia", emojis: "🐚🌊", products: ["Bloquinho tema praia", "Adesivos de conchas e ondas", "Canetas em tons de mar", "Marca-textos coloridos", "Washi tape ondas", "Cartão com mensagem de verão"] },
+    outono: { hook: "Um clima aconchegante para planejar com calma.", elements: "folhas douradas, tons quentes, café e pequenos momentos de pausa", emojis: "🍂☕", products: ["Caderneta em tons terrosos", "Adesivos de folhas e xícaras", "Canetas em cores quentes", "Marca-textos suaves", "Washi tape folhas", "Cartão com mensagem acolhedora"] },
+    natal: { hook: "O clima de festa chegando na sua mesa de estudos.", elements: "brilho, pinheiros, neve e pequenos presentes", emojis: "🎄✨", products: ["Caderneta de fim de ano", "Adesivos natalinos", "Canetas vermelhas e verdes", "Marca-textos pastel", "Washi tape festivo", "Cartão para presentear"] },
+    escola: { hook: "Organização com personalidade para o seu ano.", elements: "cadernos, planners, rotinas e muita criatividade", emojis: "🎒✏️", products: ["Planner ou caderno de estudos", "Adesivos de organização", "Canetas coloridas", "Marca-textos", "Post-its decorados", "Marcador de páginas"] },
+    doce: { hook: "Uma caixa tão fofa que dá vontade de guardar.", elements: "doces, corações, cores suaves e muito carinho", emojis: "🍓💕", products: ["Caderneta fofa", "Adesivos de doces e corações", "Canetas coloridas", "Marca-textos pastel", "Washi tape doce", "Cartão com recado carinhoso"] },
+    arco: { hook: "Um mês cheio de cor e alegria.", elements: "arco-íris, cores vibrantes, nuvens e sorrisos", emojis: "🌈✨", products: ["Caderneta colorida", "Adesivos arco-íris", "Conjunto de canetas coloridas", "Marca-textos", "Washi tape colorida", "Cartão com mensagem alegre"] },
   };
-  const GENERIC = (name) => ({ d: `Uma caixa pensada com carinho em torno do tema “${name}”.\n\nProdutos de papelaria que combinam entre si, para você descobrir mês a mês.`, p: ["Caderneta ou bloquinho do tema", "Adesivos exclusivos", "Canetas em tons que combinam", "Lápis ou marca-texto", "Item surpresa do mês", "Cartão com mensagem"] });
+  const GENERIC = (name) => ({ hook: `Um mês inteiro para viver o tema ${String(name || "").trim() || "do mês"}.`, elements: "cores, texturas e pequenos detalhes que combinam entre si", emojis: "✨💜", products: ["Caderneta ou bloquinho do tema", "Adesivos exclusivos", "Canetas em tons que combinam", "Lápis ou marca-texto", "Item surpresa do mês", "Cartão com mensagem"] });
   function suggest(name, description) {
     const tp = pick(`${name} ${description}`);
     const key = Object.keys(IDEAS).find((k) => (tp.keys || []).some((w) => strip(w).startsWith(k))) || null;
-    const r = key ? IDEAS[key] : GENERIC(String(name || "").trim() || "do mês");
-    return { description: r.d, products: r.p.join("\n") };
+    const r = key ? IDEAS[key] : GENERIC(name);
+    return { description: compose(r), products: dash(r.products) };
   }
-  return { svg, suggest, topic: (text) => pick(text) };
+  return { svg, suggest, compose, dash, PURPOSES, topic: (text) => pick(text) };
 })();
 if (typeof module !== "undefined") module.exports = ThemeArt;

@@ -1,4 +1,5 @@
 (function () {
+  const REDUCED_MOTION = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const $ = (id) => document.getElementById(id);
   const brl = (n) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -85,8 +86,20 @@ $("shipping-note").textContent = S.itemsNote + " " + S.freeShippingNote;
 
   // Unboxing
   $("unbox").innerHTML = S.unboxing
-    .map((u, i) => `<div class="unbox__item"><div class="unbox__ph" aria-hidden="true">${i + 1}</div><h3>${esc(u.title)}</h3><p>${esc(u.text)}</p></div>`)
+    .map((u, i) => `<div class="unbox__item" tabindex="0" role="button" aria-pressed="false" aria-label="${esc(u.title)}: ${esc(UnboxArt.hints[i] || "")}"><figure class="unbox__art">${UnboxArt.scenes[i] || ""}</figure><h3>${esc(u.title)}</h3><p>${esc(u.text)}</p><small class="unbox__hint">${esc(UnboxArt.hints[i] || "")}</small></div>`)
     .join("");
+  // Passar o mouse, tocar ou apertar Enter abre a cena; o toque "fixa" aberta
+  document.querySelectorAll(".unbox__item").forEach((el) => {
+    let pinned = false;
+    const set = (on) => { el.classList.toggle("is-on", on); el.setAttribute("aria-pressed", String(pinned)); };
+    el.addEventListener("mouseenter", () => set(true));
+    el.addEventListener("mouseleave", () => { if (!pinned) set(false); });
+    el.addEventListener("focus", () => set(true));
+    el.addEventListener("blur", () => { if (!pinned) set(false); });
+    const toggle = () => { pinned = !pinned; set(pinned || el.matches(":hover")); };
+    el.addEventListener("click", toggle);
+    el.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+  });
 
   // Passaporte
   $("passport-text").textContent = S.passport.text;
@@ -155,6 +168,40 @@ $("shipping-note").textContent = S.itemsNote + " " + S.freeShippingNote;
     }
   }
 
+  // Temas futuros escolhidos no painel (até 4). Sem nenhum escolhido, ficam os cartões "Tema em breve".
+  (async function loadFuture() {
+    const a = S.auth;
+    if (!a || a.mode !== "live" || !a.supabase) return;
+    try {
+      const h = { apikey: a.supabase.key };
+      const [rt, rd] = await Promise.all([
+        fetch(`${a.supabase.url}/rest/v1/themes?show_on_site=eq.true&is_current=eq.false&select=name,description,products,image_url,ship_date&order=created_at.desc&limit=4`, { headers: h }),
+        fetch(`${a.supabase.url}/rest/v1/site_settings?key=eq.public.default_theme_image&select=value`, { headers: h }),
+      ]);
+      if (!rt.ok) return;
+      const list = await rt.json();
+      if (!list.length) return;
+      const def = rd.ok ? ((await rd.json())[0] || {}).value || "" : "";
+      const okImg = (u) => (/^(https?:\/\/|assets\/)/.test(u || "") ? u : "");
+      const dash = (p) => String(p).replace(/^\s*[-–•*]\s*/, "").trim();
+      $("future").classList.add("future--live");
+      $("future").innerHTML = list.map((t, i) => {
+        const img = okImg(t.image_url) || okImg(def);
+        const lines = String(t.description || "").split("\n").filter((x) => x.trim());
+        const prods = (t.products || []).map(dash).filter(Boolean);
+        return `<article class="fcard${img ? "" : " fcard--plain"}" tabindex="0" role="button" aria-expanded="false" data-i="${i}">
+          <div class="fcard__img"${img ? ` style="background-image:url(&quot;${esc(encodeURI(img))}&quot;)"` : ""}>${img ? "" : `<span>${esc(t.name)}</span>`}</div>
+          <div class="fcard__body"><h3>${esc(t.name)}</h3><p class="fcard__short">${esc(lines[0] || "")}</p>
+            <div class="fcard__more"><p>${esc(lines.slice(1).join(" "))}</p>${prods.length ? `<ul>${prods.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>` : ""}</div>
+            <small class="fcard__hint">Toque para ver mais</small></div></article>`;
+      }).join("");
+      document.querySelectorAll(".fcard").forEach((el) => {
+        const tog = () => { const on = el.classList.toggle("is-open"); el.setAttribute("aria-expanded", String(on)); };
+        el.addEventListener("click", tog);
+        el.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tog(); } });
+      });
+    } catch (e) { /* mantém os cartões "Tema em breve" */ }
+  })();
   // Tema do mês vindo do Painel dos donos (Supabase). Leitura pública, só do tema marcado "do mês".
   // Se não houver tema ou der erro, a seção continua com o texto padrão.
   (async function loadTheme() {
@@ -173,7 +220,7 @@ $("shipping-note").textContent = S.itemsNote + " " + S.freeShippingNote;
       if (t.products && t.products.length) {
         const ul = document.createElement("ul");
         ul.className = "theme__products";
-        t.products.forEach((p) => { const li = document.createElement("li"); li.textContent = p; ul.appendChild(li); });
+        t.products.map((p) => String(p).replace(/^\s*[-–•*]\s*/, "").trim()).filter(Boolean).forEach((p) => { const li = document.createElement("li"); li.textContent = p; ul.appendChild(li); });
         tag.before(ul);
       }
       const art = document.querySelector(".tear__art");
@@ -222,6 +269,14 @@ $("shipping-note").textContent = S.itemsNote + " " + S.freeShippingNote;
   // Tema do mês: toque/teclado também revelam (no mouse é só passar por cima)
   const tear = document.querySelector(".tear");
   if (tear) {
+    if ("IntersectionObserver" in window && !REDUCED_MOTION) {
+      let timer = 0;
+      new IntersectionObserver((entries) => entries.forEach((en) => {
+        clearTimeout(timer);
+        if (en.isIntersecting && en.intersectionRatio >= 0.55) timer = setTimeout(() => tear.classList.add("is-open"), 900); // rasga sozinho
+        else if (en.intersectionRatio < 0.15) tear.classList.remove("is-open"); // sai da tela: fecha, para rasgar de novo na próxima vez
+      }), { threshold: [0, 0.15, 0.55] }).observe(tear);
+    }
     tear.addEventListener("click", () => tear.classList.toggle("is-open"));
     tear.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tear.classList.toggle("is-open"); }

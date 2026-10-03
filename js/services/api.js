@@ -91,8 +91,9 @@ const API = (function () {
   const group = (arr, key) => (arr || []).reduce((m, r) => { (m[r[key]] = m[r[key]] || []).push(r); return m; }, {});
 
   /* ---------- tema (banco <-> tela) ---------- */
-  const themeFromDb = (t) => ({ id: t.id, name: t.name, description: t.description || "", products: (t.products || []).join("\n"), image: t.image_url || "", shipDate: t.ship_date || "", isCurrent: !!t.is_current });
+  const themeFromDb = (t) => ({ id: t.id, name: t.name, description: t.description || "", products: (t.products || []).join("\n"), image: t.image_url || "", shipDate: t.ship_date || "", isCurrent: !!t.is_current, showOnSite: !!t.show_on_site });
   const themeToDb = (t) => ({ name: t.name, description: t.description || null, products: String(t.products || "").split("\n").map((x) => x.trim()).filter(Boolean), image_url: t.image || null, ship_date: t.shipDate || null });
+  const dashless = (s) => String(s || "").replace(/^\s*[-–•*]\s*/, "").trim();
   const lsGet = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
   const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } };
 
@@ -342,6 +343,17 @@ const API = (function () {
           const { error } = await sb.rpc("admin_set_current_theme", { p_id: id });
           return error ? fail(error) : { ok: true };
         },
+        // Quais temas aparecem na seção "Temas futuros" do site (máximo 4; o banco recusa o 5º)
+        async setVisible(id, visible) {
+          if (!LIVE) { const l = lsGet("mrc_themes", []); const x = l.find((y) => y.id === id); if (x) { x.showOnSite = !!visible; lsSet("mrc_themes", l); } return { ok: true }; }
+          const { error } = await sb.rpc("admin_set_theme_visible", { p_id: id, p_visible: !!visible });
+          return error ? fail(error) : { ok: true };
+        },
+        async draw() {
+          if (!LIVE) return notReady("Sortear temas");
+          const { data, error } = await sb.rpc("admin_draw_themes");
+          return error ? fail(error) : { ok: true, count: data };
+        },
         // Envia a imagem do tema (arte criada pelo painel ou foto do dono) e devolve o endereço público dela
         async uploadArt(blob, ext) {
           if (!LIVE) return notReady("Enviar imagem");
@@ -360,6 +372,69 @@ const API = (function () {
       },
     },
 
+    /* ---------- BIBLIOTECA DE ARQUIVOS (imagens do site) — só donos ---------- */
+    media: {
+      publicUrl(path) { return LIVE ? sb.storage.from("site-media").getPublicUrl(path).data.publicUrl : ""; },
+      async list() {
+        if (!LIVE) return [];
+        const { data, error } = await sb.storage.from("site-media").list("", { limit: 200, sortBy: { column: "created_at", order: "desc" } });
+        if (error) throw error;
+        return (data || []).filter((f) => f.name && f.id).map((f) => ({ name: f.name, size: (f.metadata && f.metadata.size) || 0, createdAt: f.created_at, url: sb.storage.from("site-media").getPublicUrl(f.name).data.publicUrl }));
+      },
+      async upload(blob, originalName) {
+        if (!LIVE) return notReady("Enviar arquivo");
+        const base = String(originalName || "arquivo").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\.[a-z0-9]+$/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "arquivo";
+        const ext = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif" }[blob.type];
+        if (!ext) return { ok: false, message: "Use imagens JPG, PNG, WEBP ou GIF." };
+        const path = `${Date.now().toString(36)}-${base}.${ext}`;
+        const up = await sb.storage.from("site-media").upload(path, blob, { contentType: blob.type, upsert: false });
+        return up.error ? fail(up.error) : { ok: true, name: path, url: sb.storage.from("site-media").getPublicUrl(path).data.publicUrl };
+      },
+      async remove(name) {
+        if (!LIVE) return notReady("Apagar arquivo");
+        const { error } = await sb.storage.from("site-media").remove([name]);
+        return error ? fail(error) : { ok: true };
+      },
+    },
+
+    /* ---------- CONFIGURAÇÕES DO SITE (somente chaves "public.*" são lidas pelo público) ---------- */
+    settings: {
+      async get(key) {
+        if (!LIVE) return lsGet("mrc_setting_" + key, "");
+        const { data } = await sb.from("site_settings").select("value").eq("key", key).maybeSingle();
+        return data ? data.value || "" : "";
+      },
+      async set(key, value) {
+        if (!LIVE) { lsSet("mrc_setting_" + key, value); return { ok: true }; }
+        const { error } = value
+          ? await sb.from("site_settings").upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: "key" })
+          : await sb.from("site_settings").delete().eq("key", key);
+        return error ? fail(error) : { ok: true };
+      },
+    },
+
+    /* ---------- ASSISTENTE (ChatGPT/OpenAI) para os donos ----------
+       A chave da OpenAI fica só no servidor (função "assistant" do Supabase). Aqui só mandamos as mensagens. */
+    assistant: {
+      async ask(messages) {
+        if (!LIVE) return { ok: false, code: "prototype", message: "O assistente só funciona com o login real." };
+        const { data, error } = await sb.functions.invoke("assistant", { body: { messages } });
+        if (error) {
+          let code = "error";
+          try { const body = await error.context.json(); code = body.error || code; if (code === "upstream") code = "upstream" + (body.status || ""); } catch (e) {}
+          const msg = {
+            not_configured: "O assistente ainda não foi ligado: falta cadastrar a chave da OpenAI no Supabase (veja as instruções acima).",
+            rate_limited: "Você atingiu o limite de mensagens desta hora. Tente de novo daqui a pouco.",
+            forbidden: "Só donos podem usar o assistente.",
+            unauthorized: "Sua sessão expirou. Entre de novo.",
+            upstream401: "A chave da OpenAI cadastrada não é válida. Confira no Supabase.",
+            upstream429: "A conta da OpenAI está sem créditos ou no limite de uso.",
+          }[code] || "Não consegui responder agora. Tente novamente em instantes.";
+          return { ok: false, code, message: msg };
+        }
+        return { ok: true, reply: String((data && data.reply) || "") };
+      },
+    },
     /* ---------- DONOS PRINCIPAIS: quem pode ser dono ----------
        Só quem tem cargo "owner" (dono principal) consegue. O banco recusa os outros e impõe: no máximo 3 donos principais, sempre pelo menos 1. */
     owner: {
