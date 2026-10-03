@@ -100,10 +100,27 @@ const ThemeArt = (function () {
     const ink = tp.dark ? "#ffffff" : "#4d3585";
     out += `<rect x="70" y="${300 - fs * 0.85}" width="660" height="${fs * 1.45}" rx="${fs * 0.72}" fill="#ffffff" opacity="${tp.dark ? ".14" : ".72"}"/>`;
     out += `<text x="400" y="${300 + fs * 0.3}" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="${fs}" font-weight="700" fill="${ink}">${esc(title)}</text>`;
-    out += `<text x="400" y="578" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" letter-spacing="3" fill="${tp.dark ? "#e9e2ff" : "#7a7490"}">MIMOS E RABISCOS CLUB</text>`;
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc("Arte do tema " + title)}">${out}</svg>`;
   }
 
-  return { svg, topic: (text) => pick(text) };
+  /* ---------- Sugestões de descrição e produtos (por assunto) ---------- */
+  const IDEAS = {
+    jardim: { d: "Um cantinho mágico onde a criatividade floresce.\n\nFlores, luz dourada e pequenos segredos esperam por você neste mês.", p: ["Caderneta com capa floral", "Adesivos de flores e borboletas", "Canetas em tons pastel", "Marca-textos suaves", "Washi tape botânica", "Cartão com mensagem de carinho"] },
+    noite: { d: "Uma caixa para sonhar de olhos abertos.\n\nLua, estrelas e uma pitada de magia para os seus planos do mês.", p: ["Caderneta de capa azul-noite", "Adesivos de lua e estrelas", "Caneta com tinta prateada ou dourada", "Marca-textos pastel", "Washi tape estrelado", "Cartão com frase para sonhar"] },
+    mar: { d: "Brisa, sol e areia dentro de uma caixa.\n\nUm mês leve, com cara de férias, para anotar tudo que você quer viver.", p: ["Bloquinho tema praia", "Adesivos de conchas e ondas", "Canetas em tons de mar", "Marca-textos coloridos", "Washi tape ondas", "Cartão com mensagem de verão"] },
+    outono: { d: "Tons quentes e um clima aconchegante.\n\nUma caixa para planejar o mês com café, folhas douradas e muito carinho.", p: ["Caderneta em tons terrosos", "Adesivos de folhas e xícaras", "Canetas em cores quentes", "Marca-textos suaves", "Washi tape folhas", "Cartão com mensagem acolhedora"] },
+    natal: { d: "O clima de festa chegando na sua mesa de estudos.\n\nBrilho, carinho e pequenos presentes para fechar o ano.", p: ["Agenda ou caderneta de fim de ano", "Adesivos natalinos", "Canetas vermelhas e verdes", "Marca-textos pastel", "Washi tape festivo", "Cartão para presentear"] },
+    escola: { d: "Organização com personalidade para o seu ano.\n\nPlanejar, estudar e criar ficam muito mais gostosos com a papelaria certa.", p: ["Planner ou caderno de estudos", "Adesivos de organização", "Canetas coloridas", "Marca-textos", "Post-its decorados", "Régua ou marcador de páginas"] },
+    doce: { d: "Uma caixa tão fofa que dá vontade de guardar.\n\nCoraçõezinhos, cores doces e muito carinho em cada detalhe.", p: ["Caderneta fofa", "Adesivos de doces e corações", "Canetas coloridas", "Marca-textos pastel", "Washi tape doce", "Cartão com recado carinhoso"] },
+    arco: { d: "Um mês cheio de cor e alegria.\n\nCada item combina com o próximo para colorir o seu caderno.", p: ["Caderneta colorida", "Adesivos arco-íris", "Conjunto de canetas coloridas", "Marca-textos", "Washi tape colorida", "Cartão com mensagem alegre"] },
+  };
+  const GENERIC = (name) => ({ d: `Uma caixa pensada com carinho em torno do tema “${name}”.\n\nProdutos de papelaria que combinam entre si, para você descobrir mês a mês.`, p: ["Caderneta ou bloquinho do tema", "Adesivos exclusivos", "Canetas em tons que combinam", "Lápis ou marca-texto", "Item surpresa do mês", "Cartão com mensagem"] });
+  function suggest(name, description) {
+    const tp = pick(`${name} ${description}`);
+    const key = Object.keys(IDEAS).find((k) => (tp.keys || []).some((w) => strip(w).startsWith(k))) || null;
+    const r = key ? IDEAS[key] : GENERIC(String(name || "").trim() || "do mês");
+    return { description: r.d, products: r.p.join("\n") };
+  }
+  return { svg, suggest, topic: (text) => pick(text) };
 })();
 if (typeof module !== "undefined") module.exports = ThemeArt;

@@ -91,11 +91,14 @@
     <!-- TEMAS -->
     <section id="tab-themes" role="tabpanel" hidden>
       <p class="adm-hint" id="themes-hint"></p>
+      <p class="adm-warn" id="themes-pending" role="status" hidden></p>
       <form class="theme-form" id="theme-form" novalidate>
         <input type="hidden" name="id">
         <label>Nome do tema <input name="name" type="text" required></label>
-        <label>Descrição <textarea name="description"></textarea></label>
-        <label>Produtos (um por linha) <textarea name="products" placeholder="Um produto por linha"></textarea></label>
+        <label>Descrição <textarea name="description" placeholder="Pode deixar em branco: o painel sugere uma descrição bonitinha"></textarea></label>
+        <label>Produtos (um por linha) <textarea name="products" placeholder="Um produto por linha. Pode deixar em branco: o painel sugere ideias"></textarea></label>
+        <div class="theme-form__btns"><button class="btn btn--small btn--ghost" type="button" id="sug-btn">Sugerir descrição e produtos</button></div>
+        <p class="acc-muted" id="sug-msg" role="status" hidden></p>
         <label>Imagem (endereço) <input name="image" type="text" id="art-url" placeholder="Use os botões abaixo ou cole um endereço"></label>
         <div class="theme-art">
           <div class="theme-form__btns">
@@ -104,7 +107,7 @@
             <input id="art-file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
           </div>
           <p class="acc-muted" id="art-msg" role="status" hidden></p>
-          <img id="art-preview" alt="Prévia da imagem do tema" width="400" height="300" hidden>
+          <img id="art-preview" alt="Prévia da imagem do tema" width="1400" height="788" hidden>
         </div>
         <label>Data de envio <input name="shipDate" type="date"></label>
         <p class="error" id="theme-error" role="alert" hidden></p>

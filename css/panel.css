@@ -167,3 +167,5 @@ body.account { background: var(--beige); }
 .theme-art img { max-width: min(100%, 400px); height: auto; border-radius: 14px; box-shadow: var(--shadow-s); }
 .theme-art label.btn { cursor: pointer; }
 .theme-preview p { white-space: pre-line; }
+.theme-preview img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.theme-art img { aspect-ratio: 16 / 9; object-fit: cover; width: min(100%, 420px); }

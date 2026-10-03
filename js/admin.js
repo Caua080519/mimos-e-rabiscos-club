@@ -287,15 +287,20 @@
       ${t.description ? `<p>${esc(t.description)}</p>` : ""}
       ${prods.length ? `<ul>${prods.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>` : ""}
       ${t.shipDate ? `<p><small>Envio: ${d(t.shipDate)}</small></p>` : ""}
-      ${img ? `<img src="${esc(img)}" alt="Imagem do tema ${esc(t.name)}" width="400" height="300">` : ""}</div>`;
+      ${img ? `<img src="${esc(img)}" alt="Imagem do tema ${esc(t.name)}" width="1400" height="788">` : ""}</div>`;
   }
   function renderThemes() {
     const cur = themes.find((t) => t.isCurrent);
     $("theme-preview").innerHTML = previewHtml(cur);
+    const pend = themes.filter((x) => !x.image).length;
+    const pe = $("themes-pending");
+    pe.hidden = !pend;
+    pe.innerHTML = pend ? `<strong>${pend} tema(s) esperando a arte.</strong> Avise o Claude ("tem tema novo") que ele cria a imagem com o título no centro e já coloca no site.` : "";
     $("theme-list").innerHTML = themes.length
       ? themes.map((t) => `<article class="adm-card" data-id="${esc(t.id)}">
           <div class="adm-card__top"><div><h3>${esc(t.name)}</h3><p>Envio: ${d(t.shipDate)}</p></div>${t.isCurrent ? '<span class="st st--ok">Tema do mês</span>' : ""}</div>
-          <p>${esc(t.description)}</p>
+          <p style="white-space:pre-line">${esc(t.description)}</p>
+          ${t.image ? "" : `<p class="acc-muted">⏳ Arte ainda não criada.</p>`}
           <div class="theme-form__btns">
             <button class="btn btn--small btn--ghost" data-act="edit" type="button">Editar</button>
             <button class="btn btn--small btn--ghost" data-act="current" type="button">${t.isCurrent ? "Tirar do mês" : "Marcar como do mês"}</button>
@@ -304,6 +309,25 @@
       : `<p class="adm-empty">Nenhum tema cadastrado ainda.</p>`;
   }
   const form = $("theme-form");
+  /* ---------- Sugestão automática de descrição e produtos (regras por assunto; sempre editável) ---------- */
+  function suggestInto(force) {
+    const name = form.elements.name.value.trim();
+    if (!name) return false;
+    const s = ThemeArt.suggest(name, form.elements.description.value);
+    let filled = [];
+    if (force || !form.elements.description.value.trim()) { form.elements.description.value = s.description; filled.push("descrição"); }
+    if (force || !form.elements.products.value.trim()) { form.elements.products.value = s.products; filled.push("ideias de produtos"); }
+    return filled;
+  }
+  $("sug-btn").addEventListener("click", () => {
+    const name = form.elements.name.value.trim();
+    const m = $("sug-msg");
+    if (!name) { m.textContent = "Escreva o título do tema primeiro."; m.hidden = false; return; }
+    const had = form.elements.description.value.trim() || form.elements.products.value.trim();
+    if (had && !confirm("Isso substitui a descrição e os produtos que já estão escritos. Continuar?")) return;
+    suggestInto(true);
+    m.textContent = "Pronto! São ideias para você ajustar do seu jeito antes de salvar."; m.hidden = false;
+  });
   const themeErr = (m) => { $("theme-error").textContent = m; $("theme-error").hidden = !m; };
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -311,7 +335,10 @@
     const name = String(f.get("name") || "").trim();
     if (!name) return themeErr("Informe o nome do tema.");
     themeErr("");
-    const t = { id: f.get("id") || "", name, description: String(f.get("description") || "").trim(), products: String(f.get("products") || ""), image: safeImg(f.get("image")), shipDate: f.get("shipDate") || "" };
+    const auto = suggestInto(false);
+    if (auto && auto.length) { toast("Você só escreveu o título, então sugeri " + auto.join(" e ") + ". Dá para editar depois."); }
+    const f2 = new FormData(form);
+    const t = { id: f2.get("id") || "", name, description: String(f2.get("description") || "").trim(), products: String(f2.get("products") || ""), image: safeImg(f2.get("image")), shipDate: f2.get("shipDate") || "" };
     if (!LIVE && !t.id) t.id = "t" + Date.now();
     const r = await API.admin.themes.save(t);
     if (!r.ok) return themeErr(r.message);
