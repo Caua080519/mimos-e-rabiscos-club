@@ -9,8 +9,11 @@ Site do **Mimos e Rabiscos Club** (nome provisório, ainda a confirmar), clube d
 HTML, CSS e JS puros. Sem build, sem framework, sem backend. Deve abrir direto no navegador (file://), então nada de módulos ES nem fetch de JSON local: dados em `js/data.js` como objeto global `SITE`.
 
 ## Estrutura
-- `index.html`: home
-- `css/styles.css`: estilos e tokens de cor
+- `index.html`: home; `assinar.html`: escolha da Box e ida ao pagamento; `404.html`; `robots.txt`; `sitemap.xml`
+- `conta.html` + `js/conta.js`: Área do cliente (PROTÓTIPO, dados fictícios)
+- `admin.html` + `js/admin.js` + `js/admin-panel.js`: Painel dos donos (PROTÓTIPO, sem login)
+- `js/services/api.js`: camada de serviços (hoje simulada); `js/mock/demo-data.js`: dados FICTÍCIOS; `docs/arquitetura.md`: plano para o site funcional
+- `css/styles.css`: estilos e tokens de cor; `css/panel.css`: área do cliente e painel
 - `js/data.js`: TODO conteúdo editável (marca, planos, temas, FAQ, passaporte)
 - `js/app.js`: renderiza seções a partir de `SITE`
 - `assets/`: mascote e imagens

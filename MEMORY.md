@@ -19,6 +19,9 @@
 - 2026-10-03 — Frase de posicionamento: faixa de ponta a ponta com degradê (rosa/lilás/azul) e fonte Porky's (usuário escolheu). Porky's não está no Google Fonts; fallback Chewy. Para usar a real: arquivo em `assets/fonts/Porkys.ttf` (conferir licença comercial). Hover mais suave (escala ~1.03, 0.7s, sem overshoot). Todos os lapisinhos riem o tempo todo. Tema do mês rasga com glitter saindo do lapisinho. Momentos Mimo usa ilustrações SVG de exemplo em `assets/momento-*.svg` (trocar por fotos reais).
 - O navegador do painel do app emula prefers-reduced-motion: animações ficam desligadas lá; é só o teste, não bug.
 
+- 2026-10-03 — Usuário aprovou as etapas 1-3 e pediu área do cliente + painel melhorado + PASSAPORTE DIGITAL, porque teme passaportes físicos falsificados e quer saber quem é cliente de verdade e a frequência. Feito como protótipo (dados fictícios): verificação compara código + nº de selos físicos com o registro; "cliente de verdade" = pagamento confirmado. Implementação real exige servidor.
+- Regra: telas de dados usam `API` (js/services/api.js), nunca dados direto; nunca pôr segredos no front (repo público).
+
 ## Preferências do usuário
 - Fala português. Quer ver o resultado ao lado e ajustar aos poucos, então iterar em passos curtos.
 - Arquivos de memória do Code são separados dos do Cowork.

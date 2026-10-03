@@ -89,4 +89,7 @@ body.account { background: var(--beige); }
 .verify-result--bad { background: #fdecf2; border-color: #e7a8c0; }
 .verify-result h3 { margin: 0 0 .3em; }
 .verify-result p { margin: 0 0 .5em; }
+.adm-hint { color: var(--muted); font-size: .92rem; margin: 0 0 16px; }
+.theme-form__btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.adm-table td.adm-empty { text-align: center; }
 @media (min-width: 760px) { .kpis { grid-template-columns: repeat(4, 1fr); } }

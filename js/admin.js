@@ -3,7 +3,7 @@
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const brl = (n) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   const KEY = "mrc_orders";
-  const STATUS = ["A preparar", "Em preparação", "Enviado", "Entregue"];
+  const STATUS = ["A preparar", "Em preparação", "Pronta para envio", "Enviado", "Entregue"];
   const ordinal = (n) => `${n}ª caixa`;
 
   const load = (k) => { try { return JSON.parse(localStorage.getItem(k) || "[]"); } catch (e) { return []; } };
@@ -17,14 +17,11 @@
       ? `Carimbar selo ${n} e entregar o presente exclusivo (${SITE.passport.gift.replace("Presente exclusivo: ", "")})`
       : `Carimbar selo ${n} no passaporte`;
 
-  // Dados fictícios só para ver o painel funcionando
-  const DEMO = [
-    { id: 1, name: "Cliente Exemplo 1", email: "exemplo1@teste.com", phone: "(00) 00000-0001", plan: "mimobox", boxNumber: 1, month: "Mês atual", address: "Rua Exemplo, 100 - Centro", city: "Cidade Exemplo - UF", cep: "00000-000", status: "A preparar", tracking: "", pay: "PIX" },
-    { id: 2, name: "Cliente Exemplo 2", email: "exemplo2@teste.com", phone: "(00) 00000-0002", plan: "encantobox", boxNumber: 2, month: "Mês atual", address: "Av. Exemplo, 250 - Bairro Azul", city: "Cidade Exemplo - UF", cep: "00000-000", status: "Em preparação", tracking: "", pay: "Cartão" },
-    { id: 3, name: "Cliente Exemplo 3", email: "exemplo3@teste.com", phone: "(00) 00000-0003", plan: "dream-box", boxNumber: 4, month: "Mês atual", address: "Rua Exemplo, 33", city: "Outra Cidade - UF", cep: "00000-000", status: "Enviado", tracking: "AB123456789BR", pay: "Cartão" },
-    { id: 4, name: "Cliente Exemplo 4", email: "exemplo4@teste.com", phone: "(00) 00000-0004", plan: "encantobox", boxNumber: 12, month: "Mês atual", address: "Travessa Exemplo, 7", city: "Cidade Exemplo - UF", cep: "00000-000", status: "A preparar", tracking: "", pay: "Boleto" },
-  ];
-
+  // Exemplos vêm dos dados FICTÍCIOS compartilhados (js/mock/demo-data.js): um envio por cliente que tem caixa a caminho
+  const DEMO = DEMO_CUSTOMERS.filter((c) => c.next).map((c, i) => ({
+    id: i + 1, name: c.name, email: c.email, phone: c.phone, plan: c.plan, boxNumber: c.next.n, month: "Envio previsto " + new Date(c.next.shipDate + "T12:00:00").toLocaleDateString("pt-BR"),
+    address: c.address.line, city: c.address.city, cep: c.address.cep, status: c.next.status, tracking: c.next.tracking, pay: c.pay.method,
+  }));
   const planName = (id) => (SITE.plans.find((p) => p.id === id) || {}).name || id;
   const planPrice = (id) => (SITE.plans.find((p) => p.id === id) || {}).price || 0;
 

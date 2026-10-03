@@ -3,6 +3,7 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
+Disallow: /conta.html
 
 # Quando o domínio próprio (mimoserabiscosclub.com.br) estiver ativo, troque o endereço abaixo.
 Sitemap: https://caua080519.github.io/mimos-e-rabiscos-club/sitemap.xml

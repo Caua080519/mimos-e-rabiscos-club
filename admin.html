@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="assets/lapis.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/panel.css">
 </head>
 <body class="admin">
 <header class="header">
@@ -21,16 +22,54 @@
 
 <main class="container adm">
   <div class="adm-warn" role="note">
-    <strong>Modo protótipo.</strong> Os dados abaixo ficam só neste navegador e não há login ainda. Para usar de verdade com pedidos reais, falta ligar um banco de dados e uma senha. <span id="demo-note"></span>
+    <strong>Protótipo, sem segurança real.</strong> Não há login: qualquer pessoa que souber este endereço consegue abrir esta página. Os clientes mostrados são <strong>fictícios (demonstração)</strong> e as mudanças ficam só neste navegador. Para usar com clientes de verdade, é preciso ligar um servidor com login e banco de dados. <span id="demo-note"></span>
   </div>
 
-  <div class="adm-stats" id="stats"></div>
-
-  <div class="adm-tabs" role="tablist">
-    <button role="tab" class="is-on" data-tab="orders">Envios</button>
+  <div class="adm-tabs" role="tablist" id="tabs">
+    <button role="tab" class="is-on" data-tab="summary">Resumo</button>
+    <button role="tab" data-tab="customers">Clientes</button>
+    <button role="tab" data-tab="orders">Envios</button>
+    <button role="tab" data-tab="themes">Temas</button>
+    <button role="tab" data-tab="passports">Passaportes</button>
   </div>
 
-  <section id="tab-orders">
+  <!-- RESUMO -->
+  <section id="tab-summary" role="tabpanel">
+    <div class="kpis" id="kpis"></div>
+    <h2 class="adm-sub">Próximos envios</h2>
+    <ul class="next-list" id="next-list"></ul>
+    <h2 class="adm-sub">Frequência dos clientes</h2>
+    <div class="kpis" id="freq"></div>
+  </section>
+
+  <!-- CLIENTES -->
+  <section id="tab-customers" role="tabpanel" hidden>
+    <div class="adm-filters">
+      <label>Buscar
+        <input id="c-q" type="search" placeholder="Nome, e-mail ou cidade">
+      </label>
+      <label>Status
+        <select id="c-status"><option value="">Todos</option></select>
+      </label>
+      <label>Box
+        <select id="c-plan"><option value="">Todas</option></select>
+      </label>
+      <label>Confirmação
+        <select id="c-conf">
+          <option value="">Todos</option>
+          <option value="sim">Cliente confirmado (pagou)</option>
+          <option value="nao">Sem pagamento confirmado</option>
+        </select>
+      </label>
+    </div>
+    <div class="adm-table-wrap">
+      <table class="adm-table" id="c-table"></table>
+    </div>
+  </section>
+
+  <!-- ENVIOS (já existia) -->
+  <section id="tab-orders" role="tabpanel" hidden>
+    <div class="adm-stats" id="stats"></div>
     <div class="adm-filters">
       <label>Status
         <select id="f-status"><option value="">Todos</option></select>
@@ -47,9 +86,47 @@
     <div class="adm-list" id="orders"></div>
   </section>
 
+  <!-- TEMAS -->
+  <section id="tab-themes" role="tabpanel" hidden>
+    <p class="adm-hint">Cadastre o tema de cada mês. <strong>Protótipo:</strong> o que você salva aqui fica só neste navegador e <strong>ainda não muda a página principal</strong>. Quando houver banco de dados, a home poderá ler o tema marcado como "do mês" sem ninguém editar o código.</p>
+    <form class="theme-form" id="theme-form" novalidate>
+      <input type="hidden" name="id">
+      <label>Nome do tema <input name="name" type="text" required></label>
+      <label>Descrição <textarea name="description"></textarea></label>
+      <label>Produtos (um por linha) <textarea name="products" placeholder="Um produto por linha"></textarea></label>
+      <label>Imagem (endereço, ex.: assets/tema-outubro.jpg) <input name="image" type="text"></label>
+      <label>Data de envio <input name="shipDate" type="date"></label>
+      <p class="error" id="theme-error" role="alert" hidden></p>
+      <div class="theme-form__btns">
+        <button class="btn btn--small" type="submit">Salvar tema</button>
+        <button class="btn btn--small btn--ghost" type="button" id="theme-reset">Limpar formulário</button>
+      </div>
+    </form>
+    <div id="theme-preview"></div>
+    <h2 class="adm-sub">Temas cadastrados</h2>
+    <div class="adm-list" id="theme-list"></div>
+  </section>
+
+  <!-- PASSAPORTES -->
+  <section id="tab-passports" role="tabpanel" hidden>
+    <p class="adm-hint">Confira se um passaporte físico é verdadeiro: digite o código impresso nele e quantos selos ele mostra. O sistema compara com o <strong>registro digital oficial</strong>. <strong>Protótipo:</strong> os códigos <span class="mono">MR-DEMO-0001</span> a <span class="mono">MR-DEMO-0008</span> são fictícios.</p>
+    <form class="verify" id="verify-form" novalidate>
+      <div class="verify__row">
+        <label>Código do passaporte <input name="code" type="text" placeholder="MR-DEMO-0001" autocomplete="off" required></label>
+        <label>Selos no passaporte físico <input name="stamps" type="number" min="0" max="12" placeholder="ex.: 5"></label>
+        <button class="btn btn--small" type="submit">Verificar</button>
+      </div>
+      <div id="verify-result" aria-live="polite"></div>
+    </form>
+    <h2 class="adm-sub">Registro de selos por cliente</h2>
+    <div class="adm-table-wrap"><table class="adm-table" id="p-table"></table></div>
+  </section>
 </main>
 
 <script src="js/data.js"></script>
+<script src="js/mock/demo-data.js"></script>
+<script src="js/services/api.js"></script>
 <script src="js/admin.js"></script>
+<script src="js/admin-panel.js"></script>
 </body>
 </html>
