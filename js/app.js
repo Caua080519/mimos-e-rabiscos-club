@@ -8,7 +8,7 @@
   const S = SITE;
 
   // Header / nav
-  $("nav").innerHTML = S.nav.map((n) => `<a href="${n.href}">${esc(n.label)}</a>`).join("") + `<a href="conta.html" class="nav__login">Área do cliente</a>`;
+  $("nav").innerHTML = S.nav.map((n) => `<a href="${n.href}">${esc(n.label)}</a>`).join("");
   const burger = $("burger");
   burger.addEventListener("click", () => {
     const open = document.body.classList.toggle("menu-open");

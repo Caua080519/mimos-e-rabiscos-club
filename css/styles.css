@@ -516,6 +516,10 @@ body.admin { background: var(--beige); }
 :root[data-theme="dark"] .notfound { background: linear-gradient(180deg, var(--sky), var(--white)); }
 /* Celular pequeno: o cabeçalho ganhou o menu dos três pontinhos, então o botão do canto some (o logo e o menu levam aos mesmos lugares) */
 @media (max-width: 440px) {
-  .header .btn--small { display: none; }
+  .header .btn--small:not(.header-auth) { display: none; }
   .header__in { gap: 8px; }
+  .header-auth { padding: .4em .85em; white-space: nowrap; }
+  .logo { flex: 1 1 auto; min-width: 0; margin-right: 0; }
+  .logo span:last-child { overflow: hidden; text-overflow: ellipsis; }
 }
+@media (max-width: 360px) { .logo span:last-child { font-size: .8rem; } }

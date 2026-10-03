@@ -42,12 +42,25 @@
   pop.hidden = true;
   header.parentElement.appendChild(pop);
 
+  // Botão do cabeçalho, ao lado do "Assinar": "Entrar" enquanto não há login; "Área do cliente" quando há.
+  // Só na página inicial e na de assinatura (nas outras o cabeçalho já tem o botão de voltar).
+  const showAuthBtn = ["", "index.html", "assinar.html"].includes(page);
+  const authBtn = document.createElement("a");
+  authBtn.className = "btn btn--small btn--ghost header-auth";
+  if (showAuthBtn) header.insertBefore(authBtn, btn);
+  function paintAuthBtn() {
+    const logged = me ? true : hasSession() && !ready;
+    authBtn.textContent = logged ? "Área do cliente" : "Entrar";
+    authBtn.href = logged ? "conta.html" : "entrar.html?next=" + nextHere;
+  }
+
   let me = null;      // { displayName, name, email, avatarUrl, role } quando logado
   let ready = false;
 
   function initials(s) { return (String(s || "?").trim()[0] || "?").toUpperCase(); }
 
   function render() {
+    paintAuthBtn();
     const mode = getMode();
     const first = me ? (me.displayName || (me.name || "").split(" ")[0] || me.email) : "";
     const head = me
@@ -60,8 +73,7 @@
       ? `<a role="menuitem" href="conta.html">Área do cliente</a>
          ${me.role === "admin" ? `<a role="menuitem" href="admin.html">Painel dos donos</a>` : ""}
          <a role="menuitem" href="perfil.html">Minha conta</a>`
-      : `<a role="menuitem" href="entrar.html?next=${nextHere}">Entrar</a>
-         <a role="menuitem" href="conta.html">Área do cliente</a>`;
+      : `<a role="menuitem" href="conta.html">Área do cliente</a>`;
     const seg = (v, label) => `<button type="button" role="menuitemradio" aria-checked="${mode === v}" data-mode="${v}" class="${mode === v ? "is-on" : ""}">${label}</button>`;
     pop.innerHTML = `${head}
       <div class="kebab-menu__group">${account}</div>
