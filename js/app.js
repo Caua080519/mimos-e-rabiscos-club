@@ -184,6 +184,7 @@ $("shipping-note").textContent = S.itemsNote + " " + S.freeShippingNote;
         small.textContent = t.ship_date ? "chega em " + new Date(t.ship_date + "T12:00:00").toLocaleDateString("pt-BR") : "";
         if (/^(https?:\/\/|assets\/)/.test(t.image_url || "")) {
           art.classList.add("tear__art--img");
+          const card = art.closest(".tear"); if (card) card.classList.add("tear--wide");
           art.style.backgroundImage = `url("${encodeURI(t.image_url)}")`;
           art.style.backgroundSize = "cover";
           art.style.backgroundPosition = "center";

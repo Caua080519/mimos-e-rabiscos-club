@@ -9,3 +9,15 @@
     document.documentElement.setAttribute("data-theme", "light");
   }
 })();
+
+/* Proteção contra "clickjacking": se alguém tentar abrir este site dentro de uma moldura de outra página, sai da moldura. */
+(function () {
+  try {
+    if (window.top !== window.self) {
+      document.documentElement.style.display = "none";
+      window.top.location = window.self.location;
+    }
+  } catch (e) {
+    document.documentElement.style.display = "none";
+  }
+})();

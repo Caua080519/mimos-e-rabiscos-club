@@ -77,7 +77,7 @@ const ThemeArt = (function () {
     for (let i = 0; i < nUp; i++) {
       const n = tp.up[Math.floor(rand() * tp.up.length)];
       const x = R(40, 760), y = R(150, 330);
-      if (Math.abs(x - 400) < 90 && y > 150) continue; // deixa o centro livre para o lapisinho
+      if (Math.abs(x - 400) < 280 && y > 220 && y < 380) continue; // deixa a faixa do meio livre para o título
       out += place(n, x, y, n === "cloud" ? R(.8, 1.5) : R(.7, 1.3), n === "leaf" || n === "snow" ? R(-60, 60) : R(-20, 20), acc());
     }
 
@@ -91,21 +91,16 @@ const ThemeArt = (function () {
     for (let i = 0; i < nDown; i++) {
       const n = tp.down[Math.floor(rand() * tp.down.length)];
       const x = R(40, 760), y = R(455, 505);
-      if (Math.abs(x - 400) < 80) continue;
+      if (Math.abs(x - 400) < 80 && y < 480) continue;
       out += place(n, x, y, R(.8, 1.3), n === "star" || n === "heart" ? R(-15, 15) : R(-8, 8), acc());
     }
 
-    // lapisinho no centro
-    out += `<ellipse cx="400" cy="505" rx="62" ry="10" fill="#000" opacity=".12"/>`;
-    out += `<g transform="translate(400 500) scale(1.5)">${MASCOT}</g>`;
-
-    // título numa faixa suave
-    const fs = title.length <= 14 ? 54 : title.length <= 22 ? 44 : 34;
-    const ink = tp.dark ? "#ffffff" : "#5a3f9a";
-    out += `<rect x="90" y="36" width="620" height="84" rx="42" fill="${tp.dark ? "#ffffff" : "#ffffff"}" opacity="${tp.dark ? ".14" : ".78"}"/>`;
-    out += `<text x="400" y="${96 - (54 - fs) / 4}" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="${fs}" font-weight="700" fill="${ink}">${esc(title)}</text>`;
+    // título SEMPRE no centro da imagem
+    const fs = title.length <= 14 ? 76 : title.length <= 22 ? 62 : 46;
+    const ink = tp.dark ? "#ffffff" : "#4d3585";
+    out += `<rect x="70" y="${300 - fs * 0.85}" width="660" height="${fs * 1.45}" rx="${fs * 0.72}" fill="#ffffff" opacity="${tp.dark ? ".14" : ".72"}"/>`;
+    out += `<text x="400" y="${300 + fs * 0.3}" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="${fs}" font-weight="700" fill="${ink}">${esc(title)}</text>`;
     out += `<text x="400" y="578" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" letter-spacing="3" fill="${tp.dark ? "#e9e2ff" : "#7a7490"}">MIMOS E RABISCOS CLUB</text>`;
-
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc("Arte do tema " + title)}">${out}</svg>`;
   }
 

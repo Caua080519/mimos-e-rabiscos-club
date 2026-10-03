@@ -1,2 +1,16 @@
-﻿# Configuração local do Claude Code
+# Configuração local do Claude Code
 .claude/
+
+# Notas internas e registros do banco: ficam só no computador, fora do repositório público
+CLAUDE.md
+CONTEXT.md
+MEMORY.md
+docs/
+supabase/
+
+# Segredos nunca entram no repositório
+.env
+.env.*
+*.pem
+*.key
+*secret*
