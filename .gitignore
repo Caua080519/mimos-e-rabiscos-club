@@ -1,0 +1,5 @@
+﻿# Painel dos donos fica fora do site público até ter login e banco de dados
+admin.html
+js/admin.js
+# Configuração local do Claude Code
+.claude/

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 120" role="img" aria-label="Lapisinho, mascote do Mimo &amp; Rabiscos">
+  <!-- Placeholder do mascote: trocar por arte oficial mantendo o nome do arquivo -->
+  <polygon points="40,4 58,28 22,28" fill="#f3d9c4"/>
+  <polygon points="40,4 46,13 34,13" fill="#5b5470"/>
+  <rect x="22" y="28" width="36" height="12" fill="#e7c98a"/>
+  <rect x="22" y="40" width="36" height="62" rx="2" fill="#f6b8cc"/>
+  <rect x="22" y="40" width="9" height="62" fill="#f09ab5" opacity=".55"/>
+  <rect x="22" y="102" width="36" height="12" rx="6" fill="#d9cdf2"/>
+  <circle cx="34" cy="66" r="3.2" fill="#3b3550"/>
+  <circle cx="46" cy="66" r="3.2" fill="#3b3550"/>
+  <path d="M35 76 Q40 82 45 76" fill="none" stroke="#3b3550" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="30" cy="74" r="3.4" fill="#f58aa8" opacity=".55"/>
+  <circle cx="50" cy="74" r="3.4" fill="#f58aa8" opacity=".55"/>
+</svg>

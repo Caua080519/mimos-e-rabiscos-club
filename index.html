@@ -1,0 +1,195 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mimos e Rabiscos Club</title>
+  <meta name="description" content="Clube de assinatura de papelaria: todo mês uma caixa com tema, produtos e surpresas.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito:wght@400;600;700&family=Chewy&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/lapis.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="header" id="top">
+  <div class="container header__in">
+    <a class="logo" href="#top" aria-label="Mimos e Rabiscos Club">
+      <span data-mascot></span>
+      <span>Mimos e Rabiscos <em>Club</em></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Principal"></nav>
+    <a class="btn btn--small" href="pre-assinatura.html">Entrar na lista</a>
+    <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container hero__in">
+      <div class="hero__text">
+        <p class="eyebrow">Clube de assinatura de papelaria</p>
+        <h1 id="hero-title"></h1>
+        <p class="lead" id="hero-lead"></p>
+        <div class="hero__cta">
+          <a class="btn" href="#boxes">Quero assinar</a>
+          <a class="btn btn--ghost" href="#como-funciona">Como funciona</a>
+        </div>
+      </div>
+      <div class="hero__art" aria-hidden="true">
+        <div class="cloud cloud--a"></div>
+        <div class="cloud cloud--b"></div>
+        <div class="box-art">
+          <div class="box-art__lid"></div>
+          <div class="box-art__body">
+            <span data-mascot class="mascot--hero"></span>
+          </div>
+        </div>
+        <span class="spark spark--1">✦</span><span class="spark spark--2">✦</span><span class="spark spark--3">✦</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="statement">
+    <div class="container">
+      <span data-mascot class="mascot--small"></span>
+      <p class="statement__text"><mark id="statement"></mark></p>
+    </div>
+  </section>
+
+  <section class="section" id="como-funciona">
+    <div class="container">
+      <header class="section__head">
+        <p class="eyebrow">Passo a passo</p>
+        <h2>Como funciona</h2>
+      </header>
+      <ol class="steps" id="steps"></ol>
+    </div>
+  </section>
+
+  <section class="section section--tint" id="boxes">
+    <div class="container">
+      <header class="section__head">
+        <p class="eyebrow">Escolha a sua</p>
+        <h2>Nossas Boxes</h2>
+        <p class="sub">Três jeitos de receber um mimo todo mês.</p>
+      </header>
+      <div class="plans" id="plans"></div>
+      <p class="note" id="shipping-note"></p>
+    </div>
+  </section>
+
+  <section class="section" id="comparacao">
+    <div class="container">
+      <header class="section__head">
+        <p class="eyebrow">Lado a lado</p>
+        <h2>Compare os planos</h2>
+      </header>
+      <div class="table-wrap"><table class="compare" id="compare"></table></div>
+    </div>
+  </section>
+
+  <section class="section section--sky" id="tema">
+    <div class="container theme">
+      <div>
+        <p class="eyebrow">Neste mês</p>
+        <h2 id="theme-name"></h2>
+        <p class="lead" id="theme-text"></p>
+        <p class="tag tbd" id="theme-month"></p>
+      </div>
+      <div class="theme__card tear" tabindex="0" role="button" aria-label="Passe o mouse ou toque para revelar o tema">
+        <div class="tear__art" aria-hidden="true">
+          <span data-mascot class="mascot--small"></span>
+          <strong>Tema surpresa</strong>
+          <small class="tbd">em definição</small>
+          <i class="tear__spark tear__spark--1">✦</i><i class="tear__spark tear__spark--2">✦</i><i class="tear__spark tear__spark--3">✦</i>
+        </div>
+        <div class="tear__half tear__half--l" aria-hidden="true"><span>Revelação</span></div>
+        <div class="tear__half tear__half--r" aria-hidden="true"><span>Revelação</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="unboxing">
+    <div class="container">
+      <header class="section__head">
+        <p class="eyebrow">A melhor parte</p>
+        <h2>Unboxing</h2>
+        <p class="sub">A sensação de abrir um presente, todo mês.</p>
+      </header>
+      <div class="unbox" id="unbox"></div>
+    </div>
+  </section>
+
+  <section class="section section--tint" id="passaporte">
+    <div class="container passport">
+      <div class="passport__text">
+        <p class="eyebrow">Fidelidade</p>
+        <h2>Passaporte dos Mimos</h2>
+        <p class="lead" id="passport-text"></p>
+      </div>
+      <div class="passport__card">
+        <div class="stamps" id="stamps"></div>
+        <p class="passport__gift tbd" id="passport-gift"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="temas">
+    <div class="container">
+      <header class="section__head">
+        <p class="eyebrow">O que vem por aí</p>
+        <h2>Temas futuros</h2>
+      </header>
+      <div class="future" id="future"></div>
+    </div>
+  </section>
+
+  <section class="section section--sky" id="momentos">
+    <div class="container">
+      <header class="section__head">
+        <p class="eyebrow">Comunidade</p>
+        <h2>Momentos Mimo</h2>
+        <p class="sub">O mural das nossas assinantes.</p>
+      </header>
+      <div class="moments" id="moments"></div>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="container container--narrow">
+      <header class="section__head">
+        <p class="eyebrow">Dúvidas</p>
+        <h2>Perguntas frequentes</h2>
+      </header>
+      <div class="faq" id="faq-list"></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <span data-mascot></span>
+      <h2>Pronta para o seu primeiro mimo?</h2>
+      <p>Escolha sua Box e comece a colecionar.</p>
+      <a class="btn" href="#boxes">Escolher minha Box</a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container footer__in">
+    <div>
+      <strong id="f-brand"></strong>
+      <p id="f-contact"></p>
+    </div>
+    <div class="footer__links" id="f-social"></div>
+    <small>© <span id="year"></span> Mimos e Rabiscos. Todos os direitos reservados.</small>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Exemplo: caderno aberto com rabiscos e adesivos">
+  <!-- Ilustração de exemplo (placeholder). Trocar por foto real de assinante. -->
+  <rect width="400" height="400" fill="#ebe3fa"/>
+  <circle cx="60" cy="350" r="80" fill="#e0d4f6" opacity=".8"/>
+  <g transform="rotate(3 200 210)">
+    <rect x="40" y="90" width="320" height="230" rx="10" fill="#e7dcc9"/>
+    <rect x="46" y="84" width="150" height="230" rx="8" fill="#fffdf8"/>
+    <rect x="204" y="84" width="150" height="230" rx="8" fill="#fffdf8"/>
+    <line x1="200" y1="84" x2="200" y2="314" stroke="#e2d9c8" stroke-width="3"/>
+    <path d="M70 130 q20 -24 40 0 t40 0" fill="none" stroke="#f09ab5" stroke-width="4" stroke-linecap="round"/>
+    <path d="M70 170 q20 -24 40 0 t40 0" fill="none" stroke="#6fa8d6" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="105" cy="240" r="34" fill="#fbd3e1"/><text x="105" y="252" text-anchor="middle" font-size="34">♥</text>
+    <text x="278" y="130" text-anchor="middle" font-family="Georgia,serif" font-size="24" fill="#5a3f9a">hoje eu</text>
+    <text x="278" y="160" text-anchor="middle" font-family="Georgia,serif" font-size="24" fill="#5a3f9a">rabisco!</text>
+    <rect x="236" y="190" width="84" height="26" fill="#f3d9a4" opacity=".9" transform="rotate(-4 278 203)"/>
+    <path d="M250 270 l12 -26 l12 26 l-26 -16 h28z" fill="#c9a45c"/>
+  </g>
+  <g transform="rotate(-35 70 70)"><rect x="30" y="60" width="120" height="16" rx="8" fill="#f58aa8"/><polygon points="30,60 8,68 30,76" fill="#f3d9c4"/></g>
+  <text x="340" y="60" font-size="22" fill="#c9a45c">✦</text>
+</svg>
