@@ -1,4 +1,4 @@
-﻿/* Todo o conteúdo editável do site fica aqui.
+/* Todo o conteúdo editável do site fica aqui.
    Valor "em definição" = ainda não decidido; não inventar. */
 const TBD = "em definição";
 
@@ -86,14 +86,6 @@ const SITE = {
       encantobox: "",
       "dream-box": "",
     },
-  },
-
-  /* Lembretes por e-mail (Brevo, MailerLite etc.). Passo a passo em docs/email-lembretes.md.
-     endpoint vazio = o bloco de e-mail nem aparece no site. */
-  leads: {
-    endpoint: "",          // URL de envio (action) do formulário criado no serviço de e-mail
-    fields: { email: "EMAIL", name: "FIRSTNAME" }, // nomes dos campos no serviço (Brevo: EMAIL/FIRSTNAME; MailerLite: fields[email]/fields[name])
-    extra: {},             // campos fixos exigidos pelo serviço, ex.: { "ml-submit": "1", "anticsrf": "true" }
   },
 
   freeShippingNote: "*Frete grátis em avaliação. Condições em definição.",

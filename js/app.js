@@ -147,6 +147,31 @@ $("shipping-note").textContent = S.itemsNote + " " + S.freeShippingNote;
     }
   }
 
+  // Papel que rasga: faixas horizontais com borda irregular no meio; cada faixa sai com um pequeno atraso,
+  // então o rasgo "corre" de cima para baixo
+  const paper = document.querySelector(".tear__paper");
+  if (paper) {
+    const ROWS = 10;
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    const xs = Array.from({ length: ROWS + 1 }, (_, k) => 50 + (k % 2 ? 1 : -1) * rnd(3, 8));
+    let html = "";
+    for (let i = 0; i < ROWS; i++) {
+      const y0 = Math.max(0, (i * 100) / ROWS - 0.3);
+      const y1 = Math.min(100, ((i + 1) * 100) / ROWS + 0.3);
+      const ym = (y0 + y1) / 2;
+      const xm = 50 + rnd(-6, 6);
+      const delay = (i * 0.085).toFixed(3);
+      const rot = rnd(-26, -8).toFixed(1);
+      const content = `<span>Revelação</span><small>passe o mouse ou toque</small>`;
+      html +=
+        `<div class="tear__piece tear__piece--l" style="--delay:${delay}s;--rot:${rot}deg;transform-origin:0 ${ym}%;` +
+        `clip-path:polygon(0 ${y0}%,${xs[i]}% ${y0}%,${xm}% ${ym}%,${xs[i + 1]}% ${y1}%,0 ${y1}%)">${content}</div>` +
+        `<div class="tear__piece tear__piece--r" style="--delay:${delay}s;--rot:${rot}deg;transform-origin:100% ${ym}%;` +
+        `clip-path:polygon(${xs[i]}% ${y0}%,100% ${y0}%,100% ${y1}%,${xs[i + 1]}% ${y1}%,${xm}% ${ym}%)">${content}</div>`;
+    }
+    paper.innerHTML = html;
+  }
+
   // Tema do mês: toque/teclado também revelam (no mouse é só passar por cima)
   const tear = document.querySelector(".tear");
   if (tear) {

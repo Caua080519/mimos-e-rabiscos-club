@@ -7,7 +7,9 @@
 - 2026-10-03 — Projeto em `Documentos/mimo-e-rabiscos-club`.
 
 - 2026-10-03 — Pré-assinatura/lista de espera REMOVIDA a pedido do usuário. Agora os botões das Boxes levam a `assinar.html?plano=id` (pagamento por Pix e cartão via link de pagamento, ex. Mercado Pago, em `SITE.payment.links`). Só deve entrar no painel quem pagou, o que exige banco de dados + login (ainda não existe). Não prometer cobrança real antes disso.
-- 2026-10-03 — Lembretes por e-mail implementados (decidido com o usuário), ligados a serviço gratuito externo; falta ele criar a conta e colar o endpoint. Contas/serviços externos o usuário cria; eu não crio contas.
+- 2026-10-03 — Lembretes por e-mail: o usuário desistiu e mandou apagar tudo (feito). Não oferecer de novo.
+- Armadilha: nomes de classe genéricos (ex.: `.lead`) já existem no CSS; um estilo novo com o mesmo nome pintou de bege todos os textos `.lead`. Usar nomes específicos e conferir o impacto em outros elementos.
+- O usuário quer a revelação do tema como animação visível de papel rasgando (não troca instantânea). Não consegui ver animações no navegador do painel (hidden + reduced-motion); validar por código e pedir que ele confirme no navegador dele.
 
 - 2026-10-03 — Painel dos donos (usuário + pais) pedido: ver quem comprou, endereço, box, nº da compra (1ª, 2ª...) e o que colocar na caixa. Feito como protótipo em `admin.html`/`js/admin.js` com dados de exemplo. Não expor dados reais de clientes sem login e banco de dados.
 
