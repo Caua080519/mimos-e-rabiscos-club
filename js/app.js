@@ -192,6 +192,14 @@ $("shipping-note").textContent = S.itemsNote + " " + S.freeShippingNote;
     sticky.classList.toggle("is-on", show);
     sticky.setAttribute("aria-hidden", show ? "false" : "true");
     sticky.tabIndex = show ? 0 : -1;
+
+    // Destaca no menu a seção que está na tela
+    let activeHref = "";
+    S.nav.forEach((n) => {
+      const sec = document.querySelector(n.href);
+      if (sec && sec.getBoundingClientRect().top <= 140) activeHref = n.href;
+    });
+    document.querySelectorAll("#nav a").forEach((a) => a.classList.toggle("is-active", a.getAttribute("href") === activeHref));
   };
   window.addEventListener("scroll", updateSticky, { passive: true });
   updateSticky();

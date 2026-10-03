@@ -58,7 +58,9 @@ a { color: inherit; }
 .logo em { font-style: normal; color: var(--lilac-d); }
 .nav { display: none; gap: 22px; }
 .nav a { text-decoration: none; font-weight: 600; font-size: .95rem; color: var(--muted); }
-.nav a:hover { color: var(--ink); }
+.nav a:hover, .nav a.is-active { color: var(--ink); }
+.nav a { position: relative; }
+.nav a.is-active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; border-radius: 2px; background: var(--pink-d); }
 .burger { width: 42px; height: 42px; border: 0; background: var(--beige); border-radius: 50%; display: grid; place-content: center; gap: 5px; cursor: pointer; }
 .burger span { width: 18px; height: 2px; background: var(--ink); display: block; border-radius: 2px; }
 .menu-open .nav { display: flex; flex-direction: column; position: absolute; top: 68px; left: 0; right: 0; background: var(--white); padding: 18px 24px 24px; gap: 14px; box-shadow: var(--shadow); }
