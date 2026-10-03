@@ -631,10 +631,13 @@
     if (!text) return;
     chat.push({ role: "user", content: text });
     input.value = ""; renderChat();
-    const btn = $("chat-send"); btn.disabled = true; btn.textContent = "Pensando...";
-    const r = await API.assistant.ask(chat.slice(-12));
+    const btn = $("chat-send"); btn.disabled = true; btn.textContent = "Pesquisando...";
+    $("chat").insertAdjacentHTML("beforeend", '<div class="msg msg--ai"><p>Pesquisando e pensando... pode levar até 1 minuto.</p></div>');
+    $("chat").scrollTop = $("chat").scrollHeight;
+    let r;
+    try { r = await API.assistant.ask(chat.filter((m) => !m.err).slice(-12)); } catch (err) { r = { ok: false, message: "Não consegui responder agora. Tente novamente em instantes." }; }
     btn.disabled = false; btn.textContent = "Enviar";
-    chat.push({ role: "assistant", content: r.ok ? r.reply || "(sem resposta)" : r.message });
+    chat.push(r.ok ? { role: "assistant", content: r.reply || "(sem resposta)" } : { role: "assistant", content: r.message, err: true });
     renderChat();
   }
   $("chat-form").addEventListener("submit", (e) => { e.preventDefault(); sendChat(); });

@@ -428,7 +428,9 @@ const API = (function () {
             forbidden: "Só donos podem usar o assistente.",
             unauthorized: "Sua sessão expirou. Entre de novo.",
             upstream401: "A chave da OpenAI cadastrada não é válida. Confira no Supabase.",
-            upstream429: "A conta da OpenAI está sem créditos ou no limite de uso.",
+            upstream429: "A conta da OpenAI está sem créditos ou no limite de uso. Confira em platform.openai.com → Billing.",
+            upstream403: "A chave da OpenAI não tem permissão para esse modelo. Confira no painel da OpenAI.",
+            empty: "A OpenAI não devolveu texto desta vez. Tente enviar de novo.",
           }[code] || "Não consegui responder agora. Tente novamente em instantes.";
           return { ok: false, code, message: msg };
         }
