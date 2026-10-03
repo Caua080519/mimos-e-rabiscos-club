@@ -16,117 +16,116 @@
 <header class="header">
   <div class="container header__in">
     <a class="logo" id="logo" href="admin.html"><img src="assets/lapis.svg" alt="" width="26" height="38"><span>Painel <em>dos donos</em></span></a>
+    <button class="btn btn--ghost btn--small" id="btn-logout" type="button" hidden>Sair</button>
     <a class="btn btn--ghost btn--small" href="index.html">Voltar ao site</a>
   </div>
 </header>
 
 <main class="container adm">
-  <div class="adm-warn" role="note">
-    <strong>Protótipo, sem segurança real.</strong> Não há login: qualquer pessoa que souber este endereço consegue abrir esta página. Os clientes mostrados são <strong>fictícios (demonstração)</strong> e as mudanças ficam só neste navegador. Para usar com clientes de verdade, é preciso ligar um servidor com login e banco de dados. <span id="demo-note"></span>
-  </div>
-
-  <div class="adm-tabs" role="tablist" id="tabs">
-    <button role="tab" class="is-on" data-tab="summary">Resumo</button>
-    <button role="tab" data-tab="customers">Clientes</button>
-    <button role="tab" data-tab="orders">Envios</button>
-    <button role="tab" data-tab="themes">Temas</button>
-    <button role="tab" data-tab="passports">Passaportes</button>
-  </div>
-
-  <!-- RESUMO -->
-  <section id="tab-summary" role="tabpanel">
-    <div class="kpis" id="kpis"></div>
-    <h2 class="adm-sub">Próximos envios</h2>
-    <ul class="next-list" id="next-list"></ul>
-    <h2 class="adm-sub">Frequência dos clientes</h2>
-    <div class="kpis" id="freq"></div>
-  </section>
-
-  <!-- CLIENTES -->
-  <section id="tab-customers" role="tabpanel" hidden>
-    <div class="adm-filters">
-      <label>Buscar
-        <input id="c-q" type="search" placeholder="Nome, e-mail ou cidade">
-      </label>
-      <label>Status
-        <select id="c-status"><option value="">Todos</option></select>
-      </label>
-      <label>Box
-        <select id="c-plan"><option value="">Todas</option></select>
-      </label>
-      <label>Confirmação
-        <select id="c-conf">
-          <option value="">Todos</option>
-          <option value="sim">Cliente confirmado (pagou)</option>
-          <option value="nao">Sem pagamento confirmado</option>
-        </select>
-      </label>
-    </div>
-    <div class="adm-table-wrap">
-      <table class="adm-table" id="c-table"></table>
-    </div>
-  </section>
-
-  <!-- ENVIOS (já existia) -->
-  <section id="tab-orders" role="tabpanel" hidden>
-    <div class="adm-stats" id="stats"></div>
-    <div class="adm-filters">
-      <label>Status
-        <select id="f-status"><option value="">Todos</option></select>
-      </label>
-      <label>Box
-        <select id="f-plan"><option value="">Todas</option></select>
-      </label>
-      <label>Buscar
-        <input id="f-q" type="search" placeholder="Nome ou cidade">
-      </label>
-      <button class="btn btn--small btn--ghost" id="btn-demo" type="button">Carregar exemplos</button>
-      <button class="btn btn--small btn--ghost" id="btn-clear" type="button">Limpar</button>
-    </div>
-    <div class="adm-list" id="orders"></div>
-  </section>
-
-  <!-- TEMAS -->
-  <section id="tab-themes" role="tabpanel" hidden>
-    <p class="adm-hint">Cadastre o tema de cada mês. <strong>Protótipo:</strong> o que você salva aqui fica só neste navegador e <strong>ainda não muda a página principal</strong>. Quando houver banco de dados, a home poderá ler o tema marcado como "do mês" sem ninguém editar o código.</p>
-    <form class="theme-form" id="theme-form" novalidate>
-      <input type="hidden" name="id">
-      <label>Nome do tema <input name="name" type="text" required></label>
-      <label>Descrição <textarea name="description"></textarea></label>
-      <label>Produtos (um por linha) <textarea name="products" placeholder="Um produto por linha"></textarea></label>
-      <label>Imagem (endereço, ex.: assets/tema-outubro.jpg) <input name="image" type="text"></label>
-      <label>Data de envio <input name="shipDate" type="date"></label>
-      <p class="error" id="theme-error" role="alert" hidden></p>
-      <div class="theme-form__btns">
-        <button class="btn btn--small" type="submit">Salvar tema</button>
-        <button class="btn btn--small btn--ghost" type="button" id="theme-reset">Limpar formulário</button>
-      </div>
+  <!-- Entrada: só dono (cargo "admin" no banco). A proteção real é do banco, não desta tela. -->
+  <section id="gate" class="card gate" hidden>
+    <h1 class="h1-s">Entrar no painel</h1>
+    <p class="sub">Acesso só para os donos.</p>
+    <form class="form" id="gate-form" novalidate>
+      <label>E-mail <input name="email" type="email" autocomplete="email" required></label>
+      <label>Senha <input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="btn" type="submit">Entrar</button>
     </form>
-    <div id="theme-preview"></div>
-    <h2 class="adm-sub">Temas cadastrados</h2>
-    <div class="adm-list" id="theme-list"></div>
+    <p class="error" id="gate-msg" role="alert" hidden></p>
   </section>
 
-  <!-- PASSAPORTES -->
-  <section id="tab-passports" role="tabpanel" hidden>
-    <p class="adm-hint">Confira se um passaporte físico é verdadeiro: digite o código impresso nele e quantos selos ele mostra. O sistema compara com o <strong>registro digital oficial</strong>. <strong>Protótipo:</strong> os códigos <span class="mono">MR-DEMO-0001</span> a <span class="mono">MR-DEMO-0008</span> são fictícios.</p>
-    <form class="verify" id="verify-form" novalidate>
-      <div class="verify__row">
-        <label>Código do passaporte <input name="code" type="text" placeholder="MR-DEMO-0001" autocomplete="off" required></label>
-        <label>Selos no passaporte físico <input name="stamps" type="number" min="0" max="12" placeholder="ex.: 5"></label>
-        <button class="btn btn--small" type="submit">Verificar</button>
+  <div id="app" hidden>
+    <div class="adm-warn" role="note" id="adm-banner"></div>
+    <p class="error" id="toast" role="alert" hidden></p>
+
+    <div class="adm-tabs" role="tablist" id="tabs">
+      <button role="tab" class="is-on" data-tab="summary">Resumo</button>
+      <button role="tab" data-tab="customers">Clientes</button>
+      <button role="tab" data-tab="orders">Envios</button>
+      <button role="tab" data-tab="themes">Temas</button>
+      <button role="tab" data-tab="passports">Passaportes</button>
+      <button class="btn btn--small btn--ghost" id="btn-refresh" type="button">Atualizar</button>
+    </div>
+
+    <!-- RESUMO -->
+    <section id="tab-summary" role="tabpanel">
+      <div class="kpis" id="kpis"></div>
+      <h2 class="adm-sub">Próximos envios</h2>
+      <ul class="next-list" id="next-list"></ul>
+      <h2 class="adm-sub">Frequência dos clientes</h2>
+      <div class="kpis" id="freq"></div>
+    </section>
+
+    <!-- CLIENTES -->
+    <section id="tab-customers" role="tabpanel" hidden>
+      <div class="adm-filters">
+        <label>Buscar <input id="c-q" type="search" placeholder="Nome, e-mail ou cidade"></label>
+        <label>Status <select id="c-status"><option value="">Todos</option></select></label>
+        <label>Box <select id="c-plan"><option value="">Todas</option></select></label>
+        <label>Confirmação
+          <select id="c-conf">
+            <option value="">Todos</option>
+            <option value="sim">Cliente confirmado (pagou)</option>
+            <option value="nao">Sem pagamento confirmado</option>
+          </select>
+        </label>
       </div>
-      <div id="verify-result" aria-live="polite"></div>
-    </form>
-    <h2 class="adm-sub">Registro de selos por cliente</h2>
-    <div class="adm-table-wrap"><table class="adm-table" id="p-table"></table></div>
-  </section>
+      <div class="adm-table-wrap"><table class="adm-table" id="c-table"></table></div>
+    </section>
+
+    <!-- ENVIOS -->
+    <section id="tab-orders" role="tabpanel" hidden>
+      <div class="adm-stats" id="stats"></div>
+      <div class="adm-filters">
+        <label>Status <select id="f-status"><option value="">Todos</option></select></label>
+        <label>Box <select id="f-plan"><option value="">Todas</option></select></label>
+        <label>Buscar <input id="f-q" type="search" placeholder="Nome ou cidade"></label>
+      </div>
+      <div class="adm-list" id="orders"></div>
+    </section>
+
+    <!-- TEMAS -->
+    <section id="tab-themes" role="tabpanel" hidden>
+      <p class="adm-hint" id="themes-hint"></p>
+      <form class="theme-form" id="theme-form" novalidate>
+        <input type="hidden" name="id">
+        <label>Nome do tema <input name="name" type="text" required></label>
+        <label>Descrição <textarea name="description"></textarea></label>
+        <label>Produtos (um por linha) <textarea name="products" placeholder="Um produto por linha"></textarea></label>
+        <label>Imagem (endereço, ex.: assets/tema-outubro.jpg) <input name="image" type="text"></label>
+        <label>Data de envio <input name="shipDate" type="date"></label>
+        <p class="error" id="theme-error" role="alert" hidden></p>
+        <div class="theme-form__btns">
+          <button class="btn btn--small" type="submit">Salvar tema</button>
+          <button class="btn btn--small btn--ghost" type="button" id="theme-reset">Limpar formulário</button>
+        </div>
+      </form>
+      <div id="theme-preview"></div>
+      <h2 class="adm-sub">Temas cadastrados</h2>
+      <div class="adm-list" id="theme-list"></div>
+    </section>
+
+    <!-- PASSAPORTES -->
+    <section id="tab-passports" role="tabpanel" hidden>
+      <p class="adm-hint">Confira se um passaporte físico é verdadeiro: digite o código impresso nele e quantos selos ele mostra. O sistema compara com o <strong>registro digital oficial</strong>.</p>
+      <form class="verify" id="verify-form" novalidate>
+        <div class="verify__row">
+          <label>Código do passaporte <input name="code" type="text" placeholder="MR-XXXX-XXXX-XXXX-XXXX" autocomplete="off" required></label>
+          <label>Selos no passaporte físico <input name="stamps" type="number" min="0" max="12" placeholder="ex.: 5"></label>
+          <button class="btn btn--small" type="submit">Verificar</button>
+        </div>
+        <div id="verify-result" aria-live="polite"></div>
+      </form>
+      <h2 class="adm-sub">Registro de selos por cliente</h2>
+      <div class="adm-table-wrap"><table class="adm-table" id="p-table"></table></div>
+    </section>
+  </div>
 </main>
 
 <script src="js/data.js"></script>
 <script src="js/mock/demo-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
 <script src="js/services/api.js"></script>
 <script src="js/admin.js"></script>
-<script src="js/admin-panel.js"></script>
 </body>
 </html>

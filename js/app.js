@@ -155,6 +155,42 @@ $("shipping-note").textContent = S.itemsNote + " " + S.freeShippingNote;
     }
   }
 
+  // Tema do mês vindo do Painel dos donos (Supabase). Leitura pública, só do tema marcado "do mês".
+  // Se não houver tema ou der erro, a seção continua com o texto padrão.
+  (async function loadTheme() {
+    const a = S.auth;
+    if (!a || a.mode !== "live" || !a.supabase) return;
+    try {
+      const r = await fetch(`${a.supabase.url}/rest/v1/themes?is_current=eq.true&select=name,description,products,image_url,ship_date&limit=1`, { headers: { apikey: a.supabase.key } });
+      if (!r.ok) return;
+      const t = (await r.json())[0];
+      if (!t || !t.name) return;
+      $("theme-name").textContent = "Tema do mês: " + t.name;
+      if (t.description) $("theme-text").textContent = t.description;
+      const tag = $("theme-month");
+      tag.classList.remove("tbd");
+      tag.textContent = t.ship_date ? "Envio em " + new Date(t.ship_date + "T12:00:00").toLocaleDateString("pt-BR") : "Tema: " + t.name;
+      if (t.products && t.products.length) {
+        const ul = document.createElement("ul");
+        ul.className = "theme__products";
+        t.products.forEach((p) => { const li = document.createElement("li"); li.textContent = p; ul.appendChild(li); });
+        tag.before(ul);
+      }
+      const art = document.querySelector(".tear__art");
+      if (art) {
+        art.querySelector("strong").textContent = t.name;
+        const small = art.querySelector("small");
+        small.classList.remove("tbd");
+        small.textContent = t.ship_date ? "chega em " + new Date(t.ship_date + "T12:00:00").toLocaleDateString("pt-BR") : "";
+        if (/^(https?:\/\/|assets\/)/.test(t.image_url || "")) {
+          art.style.backgroundImage = `linear-gradient(rgba(255,255,255,.55), rgba(255,255,255,.55)), url("${encodeURI(t.image_url)}")`;
+          art.style.backgroundSize = "cover";
+          art.style.backgroundPosition = "center";
+        }
+      }
+    } catch (e) { /* mantém o texto padrão */ }
+  })();
+
   // Papel que rasga: faixas horizontais com borda irregular no meio; cada faixa sai com um pequeno atraso,
   // então o rasgo "corre" de cima para baixo
   const paper = document.querySelector(".tear__paper");

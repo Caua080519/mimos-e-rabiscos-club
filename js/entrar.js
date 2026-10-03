@@ -5,6 +5,10 @@
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   $("year").textContent = new Date().getFullYear();
 
+  // Para onde ir depois de entrar: só páginas deste site (nunca endereço de fora)
+  const nextParam = new URLSearchParams(location.search).get("next") || "";
+  const DEST = /^[a-z0-9-]+\.html(\?[A-Za-z0-9=&_-]*)?$/i.test(nextParam) ? nextParam : "conta.html";
+
   const msg = (t, good) => { const m = $("login-msg"); m.textContent = t; m.hidden = !t; m.style.color = good ? "#25683b" : ""; };
 
   // Já está logado (sessão de demonstração)? Vai direto para a área.
@@ -15,7 +19,7 @@
   };
   if (recovering) showNewPassword();
   API.auth.onPasswordRecovery(showNewPassword);
-  API.auth.currentUser().then((u) => { if (u && !recovering) location.replace("conta.html"); });
+  API.auth.currentUser().then((u) => { if (u && !recovering) location.replace(DEST); });
 
   $("form-new").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -23,7 +27,7 @@
     if (f.password.value.length < 8) return msg("A senha precisa ter pelo menos 8 caracteres.");
     const r = await API.auth.updatePassword(f.password.value);
     f.password.value = "";
-    if (r.ok) location.href = "conta.html"; else msg(r.message);
+    if (r.ok) location.href = DEST; else msg(r.message);
   });
 
   $("login-tabs").addEventListener("click", (e) => {
@@ -44,7 +48,7 @@
     if (!f.password.value) return msg("Informe sua senha.");
     const r = await API.auth.signIn(f.email.value.trim(), f.password.value);
     f.password.value = "";
-    if (r.ok) location.href = "conta.html"; else msg(r.message);
+    if (r.ok) location.href = DEST; else msg(r.message);
   });
 
   $("form-up").addEventListener("submit", async (e) => {
@@ -57,7 +61,7 @@
     const r = await API.auth.signUp({ name: f.name.value.trim(), email: f.email.value.trim(), password: f.password.value });
     f.password.value = "";
     if (r.ok && r.confirm) { e.target.reset(); msg(r.message, true); }
-    else if (r.ok) location.href = "conta.html";
+    else if (r.ok) location.href = DEST;
     else msg(r.message);
   });
 
@@ -76,7 +80,7 @@
     });
     $("demo-go").addEventListener("click", async () => {
       await API.auth.signInDemo($("demo-who").value);
-      location.href = "conta.html";
+      location.href = DEST;
     });
   }
 })();

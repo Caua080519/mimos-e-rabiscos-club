@@ -26,6 +26,10 @@
 
 - 2026-10-03 — Usuário criou conta no Supabase; criei o projeto (id qrhpahmgcgimmrmlfdcj, org gomtbwmdgfnwtotpkuet) e o schema com RLS. Só a chave publishable está no site. NUNCA pôr a chave secreta no repo. Não criar contas de teste no Auth (regra: sem criar contas fora de localhost); quem testa o cadastro é o usuário.
 
+- 2026-10-03 — Fluxo operacional sem pagamento automático: cliente cria conta, informa endereço, reserva Box (aguardando pagamento); dono confirma o pagamento no painel (Clientes > Registrar pagamento), que cria passaporte e a 1ª caixa; "Entregue" gera o selo oficial. Só promover alguém a admin com confirmação do usuário sobre o e-mail.
+- Dados de cliente no painel vêm de cadastro público: SEMPRE escapar HTML (esc) antes de renderizar (XSS).
+- O servidor local (python http.server) tem limite de 2h; quando cair o aviso diz para não reiniciar se já estava no máximo. Verificar JS com `node --check` e testar RLS por SQL com rollback.
+
 ## Preferências do usuário
 - Fala português. Quer ver o resultado ao lado e ajustar aos poucos, então iterar em passos curtos.
 - Arquivos de memória do Code são separados dos do Cowork.

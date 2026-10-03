@@ -44,8 +44,9 @@
       </div>
 
       <p class="pay__notice" id="pay-notice" hidden></p>
-      <a class="btn btn--lg pay__go" id="pay-go" href="#" rel="noopener">Ir para o pagamento</a>
-      <p class="pay__fine">Você será levada(o) a um ambiente de pagamento seguro para concluir a assinatura.</p>
+      <a class="btn btn--lg pay__go" id="pay-go" href="#" rel="noopener">Reservar minha Box</a>
+      <p class="pay__fine" id="pay-fine"></p>
+      <div class="pay__done" id="pay-done" hidden aria-live="polite"></div>
     </div>
   </div>
 </main>
@@ -55,6 +56,9 @@
 </footer>
 
 <script src="js/data.js"></script>
+<script src="js/mock/demo-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
+<script src="js/services/api.js"></script>
 <script src="js/checkout.js"></script>
 </body>
 </html>

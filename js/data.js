@@ -81,6 +81,9 @@ const SITE = {
   /* Pagamento: cole aqui o link de pagamento de cada Box (Mercado Pago, InfinitePay etc.).
      Vazio = o botão fica desativado e a página avisa que o pagamento ainda não está ativo. */
   payment: {
+    // Pix manual (opcional): preencha a chave e o nome para mostrar a instrução ao cliente depois de reservar a Box.
+    // Quem confirma o pagamento é você, no Painel dos donos (Clientes > Registrar pagamento).
+    pix: { key: "", receiver: "" },
     links: {
       mimobox: "",
       encantobox: "",

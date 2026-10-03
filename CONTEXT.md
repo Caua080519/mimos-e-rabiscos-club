@@ -30,7 +30,9 @@ Fidelidade físico: a primeira compra dá direito ao passaporte; cada Box recebi
 - [ ] Passaporte digital real: registro oficial de selos no servidor + código impossível de adivinhar (ver docs/arquitetura.md). Hoje só demonstração (`MR-DEMO-000X`).
 - [x] Supabase ligado (projeto mimos-e-rabiscos-club, sa-east-1): login real de clientes, banco com RLS (supabase/001_init_schema.sql). `SITE.auth.mode = "live"`.
 - [ ] Pendente do usuário no painel do Supabase: Authentication > URL Configuration (Site URL e Redirect URLs); depois criar a própria conta e me avisar para virar admin.
-- [ ] Painel dos donos com dados reais + login de admin; gateway de pagamento; passaporte/selos reais pelo painel.
+- [x] Painel dos donos REAL (login de dono, clientes reais, registrar pagamento, caixas/selos oficiais, temas que aparecem na home, verificação de passaporte). Endereço editável na área do cliente; cliente reserva a Box em `assinar.html` (aguardando pagamento). Migrations em supabase/001 e 002.
+- [ ] Pendente: o usuário confirmar o e-mail dele para virar admin (já existe 1 conta cadastrada, aguardando confirmação do usuário de que é dele) e configurar Pix (`SITE.payment.pix`) ou link de pagamento.
+- [ ] Gateway de pagamento automático; trocar plano/cancelar pelo cliente; e-mails automáticos; textos legais; domínio.
 - [ ] Ajustes de visual com o usuário
 - [ ] Checkout simulado em 7 etapas (Box, duração, conta, endereço, pagamento, revisão, confirmação)
 - [ ] Área do assinante (plano, próxima cobrança, envio, passaporte, histórico, cupons, cancelamento)

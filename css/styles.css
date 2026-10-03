@@ -464,3 +464,6 @@ body.admin { background: var(--beige); }
 /* Link Entrar no menu */
 .nav__login { font-weight: 700 !important; color: var(--ink) !important; }
 @media (min-width: 880px) { .nav__login { border: 1.5px solid var(--line); border-radius: 999px; padding: .35em 1em; } }
+
+/* Produtos do tema do mês (vem do painel) */
+.theme__products { margin: 0 0 14px; padding-left: 1.2em; color: var(--muted); }

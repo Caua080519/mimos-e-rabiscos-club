@@ -110,3 +110,32 @@ body.account { background: var(--beige); }
 .theme-form__btns { display: flex; flex-wrap: wrap; gap: 10px; }
 .adm-table td.adm-empty { text-align: center; }
 @media (min-width: 760px) { .kpis { grid-template-columns: repeat(4, 1fr); } }
+
+/* Entrada do painel, ações da tabela, endereço e confirmação da reserva */
+.gate { max-width: 440px; margin: 40px auto; display: grid; gap: 12px; }
+.gate h1 { margin: 0; }
+.adm-table td.acts { display: grid; gap: 6px; min-width: 170px; }
+.adm-table td.acts select { font: inherit; font-size: .85rem; padding: .4em .6em; border: 1.5px solid var(--line); border-radius: 10px; background: var(--white); max-width: 100%; }
+.addr-form { grid-template-columns: 1fr; gap: 12px; }
+.addr-form label { display: grid; gap: 4px; font-size: .85rem; font-weight: 700; }
+.addr-form input { font: inherit; font-weight: 400; padding: .65em .9em; border: 1.5px solid var(--line); border-radius: 12px; background: var(--beige); color: var(--ink); width: 100%; }
+.addr-form .btn { justify-self: start; }
+@media (min-width: 760px) { .addr-form { grid-template-columns: 1fr 2fr 1fr; } .addr-form .addr-wide { grid-column: span 2; } .addr-form .error, .addr-form .btn { grid-column: 1 / -1; } }
+.pay__done { background: var(--beige); border-radius: 18px; padding: 18px; display: grid; gap: 10px; text-align: center; justify-items: center; }
+.pay__done h2 { margin: 0; font-size: 1.3rem; }
+.pay__done p { margin: 0; }
+.pix-key { display: inline-block; background: var(--white); padding: .4em .8em; border-radius: 10px; word-break: break-all; }
+/* Entrada do painel, ações da tabela, endereço e confirmação da reserva */
+.gate { max-width: 440px; margin: 40px auto; display: grid; gap: 12px; }
+.gate h1 { margin: 0; }
+.adm-table td.acts { display: grid; gap: 6px; min-width: 170px; }
+.adm-table td.acts select { font: inherit; font-size: .85rem; padding: .4em .6em; border: 1.5px solid var(--line); border-radius: 10px; background: var(--white); max-width: 100%; }
+.addr-form { grid-template-columns: 1fr; gap: 12px; }
+.addr-form label { display: grid; gap: 4px; font-size: .85rem; font-weight: 700; }
+.addr-form input { font: inherit; font-weight: 400; padding: .65em .9em; border: 1.5px solid var(--line); border-radius: 12px; background: var(--beige); color: var(--ink); width: 100%; }
+.addr-form .btn { justify-self: start; }
+@media (min-width: 760px) { .addr-form { grid-template-columns: 1fr 2fr 1fr; } .addr-form .addr-wide { grid-column: span 2; } .addr-form .error, .addr-form .btn { grid-column: 1 / -1; } }
+.pay__done { background: var(--beige); border-radius: 18px; padding: 18px; display: grid; gap: 10px; text-align: center; justify-items: center; }
+.pay__done h2 { margin: 0; font-size: 1.3rem; }
+.pay__done p { margin: 0; }
+.pix-key { display: inline-block; background: var(--white); padding: .4em .8em; border-radius: 10px; word-break: break-all; }

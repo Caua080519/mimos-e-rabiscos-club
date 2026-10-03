@@ -7,7 +7,7 @@
   const d = (s) => (s ? new Date(s + "T12:00:00").toLocaleDateString("pt-BR") : "—");
   const monthName = (s) => new Date(s + "T12:00:00").toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
   const addMonths = (s, n) => { const x = new Date(s + "T12:00:00"); x.setMonth(x.getMonth() + n); return x.toISOString().slice(0, 10); };
-  const plan = (id) => SITE.plans.find((p) => p.id === id) || { name: id, price: 0, items: "" };
+  const plan = (id) => SITE.plans.find((p) => p.id === id) || { name: "", price: 0, items: "" };
   const STEPS = ["A preparar", "Em preparação", "Pronta para envio", "Enviado", "Entregue"];
   const STEP_LABEL = { Enviado: "Enviado (a caminho)" };
   const PAID_BOX = ["A preparar", "Em preparação", "Pronta para envio", "Enviado"];
@@ -82,8 +82,8 @@
 
       <section class="acc-card">
         <h2>Meu plano</h2>
-        <p class="acc-big">${esc(p.name)} <span>${brl(p.price)}/mês</span></p>
-        <p class="acc-muted">${esc(p.items)} por caixa (estimativa)</p>
+        ${c.plan ? `<p class="acc-big">${esc(p.name)} <span>${brl(p.price)}/mês</span></p>
+        <p class="acc-muted">${esc(p.items)} por caixa (estimativa)</p>` : `<p class="acc-muted">Você ainda não escolheu uma Box.</p><a class="btn btn--small" href="assinar.html">Escolher minha Box</a>`}
         <dl class="acc-dl">
           <div><dt>Assinante desde</dt><dd>${d(c.since)}</dd></div>
           <div><dt>Próxima cobrança</dt><dd>${nextBilling ? d(nextBilling) : "—"}</dd></div>
@@ -135,10 +135,21 @@
         ${history ? `<ul class="hist">${history}</ul>` : `<p class="acc-muted">Você ainda não recebeu nenhuma caixa. A primeira está a caminho.</p>`}
       </section>
 
-      <section class="acc-card">
+      <section class="acc-card acc-card--wide" id="addr-card">
         <h2>Endereço de entrega</h2>
-        <p>${esc(c.address.line)}<br>${esc(c.address.city)}<br>CEP ${esc(c.address.cep)}</p>
-        <button class="btn btn--ghost btn--small" data-proto="Alterar endereço">Alterar endereço</button>
+        ${c.demo ? `<p>${esc(c.address.line)}<br>${esc(c.address.city)}<br>CEP ${esc(c.address.cep)}</p>
+          <button class="btn btn--ghost btn--small" data-proto="Alterar endereço">Alterar endereço</button>` : `
+          ${c.address.line ? "" : `<p class="acc-note">Informe seu endereço para a gente saber onde entregar a sua caixa.</p>`}
+          <form class="form addr-form" id="addr-form" novalidate>
+            <label>CEP <input name="cep" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" value="${esc(c.address.cep)}" required></label>
+            <label class="addr-wide">Rua e número <input name="line" autocomplete="address-line1" value="${esc(c.address.line)}" required></label>
+            <label>Complemento <input name="complement" autocomplete="address-line2" value="${esc(c.address.complement)}"></label>
+            <label>Bairro <input name="district" value="${esc(c.address.district)}"></label>
+            <label>Cidade <input name="city" autocomplete="address-level2" value="${esc(c.address.city)}" required></label>
+            <label>UF <input name="state" maxlength="2" autocomplete="address-level1" value="${esc(c.address.state)}" required></label>
+            <p class="error" id="addr-msg" role="alert" hidden></p>
+            <button class="btn btn--small" type="submit">Salvar endereço</button>
+          </form>`}
       </section>
 
       <section class="acc-card">
@@ -177,6 +188,24 @@
       : what === "Alterar endereço" ? await API.subscriptions.updateAddress()
       : await API.payments.updatePaymentMethod();
     proto(what + " (protótipo)", res.message + " Nenhuma alteração foi feita.");
+  });
+
+  $("acc-grid").addEventListener("submit", async (e) => {
+    const f = e.target.closest("#addr-form");
+    if (!f) return;
+    e.preventDefault();
+    const msg = (m, ok) => { const el = $("addr-msg"); el.textContent = m; el.hidden = !m; el.style.color = ok ? "#25683b" : ""; };
+    const v = (n) => f.elements[n].value.trim();
+    if (!/^\d{5}-?\d{3}$/.test(v("cep"))) return msg("Informe um CEP válido (8 números).");
+    if (v("line").length < 5) return msg("Informe a rua e o número.");
+    if (v("city").length < 2) return msg("Informe a cidade.");
+    if (!/^[A-Za-z]{2}$/.test(v("state"))) return msg("Informe a sigla do estado (2 letras), por exemplo SP.");
+    const cep = v("cep").replace(/\D/g, "").replace(/^(\d{5})(\d{3})$/, "$1-$2");
+    const r = await API.subscriptions.saveAddress({ line: v("line"), complement: v("complement"), district: v("district"), city: v("city"), state: v("state").toUpperCase(), cep });
+    if (!r.ok) return msg(r.message);
+    const user = await API.auth.currentUser();
+    render(await API.customers.get(user.id));
+    const el = $("addr-msg"); if (el) { el.textContent = "Endereço salvo!"; el.hidden = false; el.style.color = "#25683b"; }
   });
 
   $("logout").addEventListener("click", async () => { await API.auth.signOut(); location.href = "entrar.html"; });
