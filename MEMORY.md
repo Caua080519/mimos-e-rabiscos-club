@@ -7,7 +7,7 @@
 - 2026-10-03 — Projeto em `Documentos/mimo-e-rabiscos-club`.
 
 - 2026-10-03 — Pré-assinatura/lista de espera REMOVIDA a pedido do usuário. Agora os botões das Boxes levam a `assinar.html?plano=id` (pagamento por Pix e cartão via link de pagamento, ex. Mercado Pago, em `SITE.payment.links`). Só deve entrar no painel quem pagou, o que exige banco de dados + login (ainda não existe). Não prometer cobrança real antes disso.
-- 2026-10-03 — Usuário quer amadurecer a ideia de coletar e-mail de quem não comprou e mandar lembretes. Não implementar ainda; discutir antes.
+- 2026-10-03 — Lembretes por e-mail implementados (decidido com o usuário), ligados a serviço gratuito externo; falta ele criar a conta e colar o endpoint. Contas/serviços externos o usuário cria; eu não crio contas.
 
 - 2026-10-03 — Painel dos donos (usuário + pais) pedido: ver quem comprou, endereço, box, nº da compra (1ª, 2ª...) e o que colocar na caixa. Feito como protótipo em `admin.html`/`js/admin.js` com dados de exemplo. Não expor dados reais de clientes sem login e banco de dados.
 

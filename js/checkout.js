@@ -53,4 +53,39 @@
   $("pay-go").addEventListener("click", (e) => { if ($("pay-go").classList.contains("is-off")) e.preventDefault(); });
 
   update();
+
+  // ===== Lembretes por e-mail =====
+  const L = SITE.leads || {};
+  if (L.endpoint) {
+    $("lead").hidden = false;
+    const err = (m) => { $("lead-error").textContent = m; $("lead-error").hidden = !m; };
+    $("lead-form").addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      const f = ev.target;
+      if (f.website.value) return; // campo-armadilha para robôs
+      if (!f.name.value.trim()) return err("Informe seu nome.");
+      if (!/^\S+@\S+\.\S+$/.test(f.email.value.trim())) return err("Informe um e-mail válido.");
+      if (!f.consent.checked) return err("Marque a caixa para receber os e-mails.");
+      err("");
+
+      const fd = new FormData();
+      fd.append(L.fields.email, f.email.value.trim());
+      fd.append(L.fields.name, f.name.value.trim());
+      Object.entries(L.extra || {}).forEach(([k, v]) => fd.append(k, v));
+
+      const btn = $("lead-btn");
+      btn.disabled = true;
+      btn.textContent = "Enviando...";
+      try {
+        // no-cors: o serviço não devolve resposta legível para o navegador, mas recebe o cadastro
+        await fetch(L.endpoint, { method: "POST", body: fd, mode: "no-cors" });
+        $("lead-form-view").hidden = true;
+        $("lead-done-view").hidden = false;
+      } catch (e) {
+        err("Não conseguimos enviar agora. Confira sua conexão e tente de novo.");
+        btn.disabled = false;
+        btn.textContent = "Quero receber o lembrete";
+      }
+    });
+  }
 })();

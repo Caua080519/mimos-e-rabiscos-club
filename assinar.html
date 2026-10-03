@@ -44,6 +44,34 @@
       <a class="btn btn--lg pay__go" id="pay-go" href="#" rel="noopener">Ir para o pagamento</a>
       <p class="pay__fine">Você será levada(o) a um ambiente de pagamento seguro para concluir a assinatura.</p>
     </div>
+
+    <!-- Lembretes por e-mail: só aparece quando SITE.leads.endpoint estiver preenchido em js/data.js -->
+    <section class="card lead" id="lead" hidden>
+      <div id="lead-form-view">
+        <h2 class="lead__title">Ainda em dúvida? A gente te lembra.</h2>
+        <p class="sub">Deixe seu e-mail e receba um lembrete carinhoso para escolher sua Box, sem pressa.</p>
+        <form class="form" id="lead-form" novalidate>
+          <label>Seu nome
+            <input name="name" type="text" autocomplete="given-name" required>
+          </label>
+          <label>Seu e-mail
+            <input name="email" type="email" autocomplete="email" required>
+          </label>
+          <input class="hp" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <label class="check">
+            <input name="consent" type="checkbox" required>
+            <span>Aceito receber e-mails do Mimos e Rabiscos Club com lembretes e novidades. Posso sair da lista a qualquer momento pelo link no final de cada e-mail.</span>
+          </label>
+          <p class="error" id="lead-error" role="alert" hidden></p>
+          <button class="btn btn--ghost" type="submit" id="lead-btn">Quero receber o lembrete</button>
+        </form>
+      </div>
+      <div id="lead-done-view" class="done" hidden>
+        <img src="assets/lapis.svg" alt="" width="48" height="72">
+        <h2 class="lead__title">Combinado!</h2>
+        <p>Confira sua caixa de entrada (e o spam, só por garantia). Se o e-mail pedir confirmação, é só clicar no link.</p>
+      </div>
+    </section>
   </div>
 </main>
 

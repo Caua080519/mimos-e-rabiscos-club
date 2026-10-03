@@ -15,7 +15,7 @@ Fidelidade físico: a primeira compra dá direito ao passaporte; cada Box recebi
 - [x] Home v1 (todas as seções, conteúdo placeholder)
 - [x] Cabeçalho corrigido para telas pequenas
 - [x] `assinar.html` + `js/checkout.js`: escolha da Box e botão "Ir para o pagamento" (Pix e cartão). Os links de pagamento ficam em `SITE.payment.links` (js/data.js); vazios = botão desativado com aviso. A antiga pré-assinatura/lista de espera foi removida.
-- [ ] Ideia em maturação: captar e-mail de quem ainda não pagou para lembrar de comprar (precisa de banco/serviço de e-mail). NÃO implementar até o usuário decidir.
+- [x] Lembretes por e-mail: formulário em `assinar.html` (nome, e-mail, consentimento LGPD, campo-armadilha), enviado a um serviço externo via `SITE.leads` (js/data.js). Escondido enquanto `endpoint` estiver vazio. Textos dos 3 e-mails e passo a passo em `docs/email-lembretes.md`. Pendente: o usuário criar a conta (MailerLite/Brevo) e colar o endpoint.
 - [x] Logo do topo volta ao início sem recarregar (home)
 - [x] `admin.html`: painel dos donos (protótipo, dados só no localStorage, sem login). Mostra cliente, box, nº da compra, endereço, o que colocar na caixa (passaporte na 1ª, selo nas demais), status e rastreio, mais a lista de espera.
 - [ ] Painel real: precisa de banco de dados + login (ex.: Supabase/Firebase) e dos pedidos chegando de verdade

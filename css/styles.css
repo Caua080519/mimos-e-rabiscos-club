@@ -393,6 +393,10 @@ a { color: inherit; }
 .pay__go.is-off { opacity: .45; cursor: not-allowed; pointer-events: auto; }
 .pay__go.is-off:hover { transform: none; box-shadow: none; }
 .pay__fine { text-align: center; color: var(--muted); font-size: .82rem; margin: 0; }
+.lead { margin-top: 24px; background: var(--beige); }
+.lead__title { font-size: 1.4rem; margin-bottom: .3em; }
+.lead .sub { margin-bottom: 1.2em; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .done__btns { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
 
 /* Painel dos donos */
