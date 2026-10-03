@@ -7,7 +7,7 @@
 
   // Para onde ir depois de entrar: só páginas deste site (nunca endereço de fora)
   const nextParam = new URLSearchParams(location.search).get("next") || "";
-  const DEST = /^[a-z0-9-]+\.html(\?[A-Za-z0-9=&_-]*)?$/i.test(nextParam) ? nextParam : "conta.html";
+  const DEST = /^[a-z0-9-]+\.html(\?[A-Za-z0-9=&_-]*)?$/i.test(nextParam) ? nextParam : "index.html";
 
   const msg = (t, good) => { const m = $("login-msg"); m.textContent = t; m.hidden = !t; m.style.color = good ? "#25683b" : ""; };
 

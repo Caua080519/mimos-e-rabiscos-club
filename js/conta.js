@@ -212,7 +212,7 @@
 
   (async function init() {
     const user = await API.auth.currentUser();
-    if (!user) { location.replace("entrar.html"); return; }
+    if (!user) { location.replace("entrar.html?next=conta.html"); return; }
     const c = await API.customers.get(user.id);
     if (!c) { await API.auth.signOut(); location.replace("entrar.html"); return; }
     if (!c.demo) {

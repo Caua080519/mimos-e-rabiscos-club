@@ -467,3 +467,55 @@ body.admin { background: var(--beige); }
 
 /* Produtos do tema do mês (vem do painel) */
 .theme__products { margin: 0 0 14px; padding-left: 1.2em; color: var(--muted); }
+
+/* ===== Menu dos três pontinhos ===== */
+.kebab { width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--beige); display: grid; place-content: center; cursor: pointer; flex: none; }
+.kebab span, .kebab span::before, .kebab span::after { display: block; width: 5px; height: 5px; border-radius: 50%; background: var(--ink); content: ""; position: relative; }
+.kebab span::before { position: absolute; top: -9px; left: 0; }
+.kebab span::after { position: absolute; top: 9px; left: 0; }
+.kebab:hover { background: var(--lilac); }
+.kebab-menu { position: absolute; right: 16px; top: calc(100% + 8px); width: min(310px, calc(100vw - 32px)); background: var(--white); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); padding: 8px; z-index: 40; max-height: calc(100vh - 90px); overflow-y: auto; }
+.kebab-menu[hidden] { display: none; }
+.kebab-menu__who { display: flex; gap: 12px; align-items: center; padding: 10px; border-bottom: 1px solid var(--line); margin-bottom: 6px; }
+.kebab-menu__who img, .kebab-menu__ini { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex: none; }
+.kebab-menu__ini { display: grid; place-items: center; background: var(--pink); color: var(--ink); font-weight: 700; font-family: var(--font-h); }
+.kebab-menu__who div { min-width: 0; }
+.kebab-menu__who strong, .kebab-menu__who small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kebab-menu__who small { color: var(--muted); }
+.kebab-menu__group { padding: 4px 0; }
+.kebab-menu__group + .kebab-menu__group { border-top: 1px solid var(--line); }
+.kebab-menu a, .kebab-menu__out { display: flex; align-items: center; min-height: 44px; padding: .5em .9em; border-radius: 12px; text-decoration: none; color: var(--ink); font: inherit; font-weight: 600; background: none; border: 0; width: 100%; text-align: left; cursor: pointer; }
+.kebab-menu a:hover, .kebab-menu__out:hover { background: var(--beige); }
+.kebab-menu__out { color: #b3366b; }
+.kebab-menu__label { margin: 6px .9em 6px; font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+.kebab-menu__seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 0 6px 6px; }
+.kebab-menu__seg button { font: inherit; font-size: .85rem; font-weight: 700; min-height: 40px; border: 1.5px solid var(--line); background: var(--white); color: var(--muted); border-radius: 12px; cursor: pointer; }
+.kebab-menu__seg button.is-on { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.header__in { position: relative; }
+
+/* ===== Modo escuro ===== */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --white: #1b1728; --beige: #241f35; --pink: #4a2c40; --pink-d: #f19ab8; --lilac: #372f58; --lilac-d: #b8a6f2;
+  --sky: #1b3049; --sky-d: #7fb4e0; --gold: #d9b56d; --ink: #f3eefc; --muted: #b5adca; --line: #3a3453;
+  --shadow: 0 10px 30px rgba(0, 0, 0, .45); --shadow-s: 0 4px 14px rgba(0, 0, 0, .35);
+}
+:root[data-theme="dark"] .header { background: rgba(27, 23, 40, .9); }
+:root[data-theme="dark"] .section--sky { background: linear-gradient(180deg, var(--sky), #17202f); }
+:root[data-theme="dark"] .statement { background: linear-gradient(100deg, #4a2c40 0%, #372f58 50%, #1f3a56 100%); }
+:root[data-theme="dark"] .statement__text { color: #f3eefc; text-shadow: 0 3px 0 rgba(0, 0, 0, .35); }
+:root[data-theme="dark"] .step:hover { background: linear-gradient(160deg, var(--white), var(--pink)); }
+:root[data-theme="dark"] .tear__art { background: radial-gradient(circle at 50% 40%, #3b3258 0%, var(--pink) 60%, var(--lilac) 100%); }
+:root[data-theme="dark"] .tear__art strong { color: #f3eefc; }
+:root[data-theme="dark"] .plan__art--mimobox { background: linear-gradient(135deg, #1f3a56, #1b2c42); }
+:root[data-theme="dark"] .plan__art--encantobox { background: linear-gradient(135deg, #4a2c40, #3a2434); }
+:root[data-theme="dark"] .plan__art--dream-box { background: linear-gradient(135deg, #372f58, #2c2647); }
+:root[data-theme="dark"] .pay__notice, :root[data-theme="dark"] .adm-warn, :root[data-theme="dark"] .noscript { background: #3b3118; border-color: #6b5a2a; color: var(--ink); }
+:root[data-theme="dark"] .error, :root[data-theme="dark"] .kebab-menu__out { color: #ff9cc0; }
+:root[data-theme="dark"] .hero__art .cloud { background: #2b2540; }
+:root[data-theme="dark"] .notfound { background: linear-gradient(180deg, var(--sky), var(--white)); }
+/* Celular pequeno: o cabeçalho ganhou o menu dos três pontinhos, então o botão do canto some (o logo e o menu levam aos mesmos lugares) */
+@media (max-width: 440px) {
+  .header .btn--small { display: none; }
+  .header__in { gap: 8px; }
+}

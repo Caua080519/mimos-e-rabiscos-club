@@ -75,3 +75,11 @@ Objetivo: provar que um passaporte físico é verdadeiro e saber quem é cliente
 - **Ainda não está ligado:** pagamento automático (Pix/cartão), troca de plano e cancelamento pelo cliente, cálculo de frete e e-mails automáticos.
 - Os avisos do verificador do Supabase sobre as funções `admin_*` (executáveis por usuários logados) são esperados: cada uma checa `private.is_admin()` no começo e foi testada com cliente comum (negado) e dono (permitido).
 - Para tornar alguém dono: no Supabase, atualizar `profiles.role` para `admin` (feito pelo SQL do projeto, nunca pelo site). Script de referência: `supabase/002_endereco_e_funcoes_admin.sql`.
+
+## Menu da conta, aparência e perfil (2026-10-03)
+- **Menu dos três pontinhos** (`js/menu.js`) em todas as páginas: Área do cliente, Minha conta, Painel dos donos (só para donos), Aparência (Claro, Escuro ou Automático) e Sair. A escolha de aparência fica salva no navegador (`localStorage "mrc_theme"`, padrão claro); `js/theme-init.js` aplica o tema antes de a página aparecer.
+- **Continuar logado:** a sessão do Supabase fica salva no navegador. O menu só carrega o login quando já existe uma sessão salva, para não pesar nas visitas de quem nunca entrou.
+- **Depois de entrar**, a pessoa volta para a página de onde veio (ou para o início). A Área do cliente é uma opção do menu, não um destino forçado.
+- **Minha conta** (`perfil.html`): foto, como quer ser chamado(a), nome, telefone e troca de senha. A foto é reduzida no navegador (256 px) e vai para a pasta `avatars/<id do usuário>/` do Supabase Storage; só o próprio usuário envia, troca ou apaga arquivos na própria pasta (regras no banco).
+- **Senha salva:** a gente nunca guarda senha. Os formulários usam os campos padrão (`autocomplete`), então o gerenciador de senhas do navegador oferece salvar.
+- Migration: `perfil_apelido_foto` (colunas `display_name` e `avatar_path`, pasta `avatars`).

@@ -70,6 +70,7 @@ const API = (function () {
     return {
       id, demo: false,
       name: (prof && prof.name) || (prof && prof.email) || "Cliente",
+      displayName: (prof && prof.display_name) || "",
       email: (prof && prof.email) || "",
       phone: (prof && prof.phone) || "",
       role: (prof && prof.role) || "customer",
@@ -153,7 +154,7 @@ const API = (function () {
         if (!LIVE) return null;
         // Dados REAIS do cliente logado. As regras (RLS) do banco só devolvem as linhas dele.
         const [prof, subs, addr, boxes, stamps, pass] = await Promise.all([
-          sb.from("profiles").select("name,email,phone,role").eq("id", id).maybeSingle(),
+          sb.from("profiles").select("name,display_name,email,phone,role").eq("id", id).maybeSingle(),
           sb.from("subscriptions").select("*").eq("user_id", id).order("created_at", { ascending: false }).limit(1),
           sb.from("addresses").select("line,complement,district,city,state,cep").eq("user_id", id).maybeSingle(),
           sb.from("boxes").select("id,n,ship_date,status,tracking").eq("user_id", id).order("n"),
@@ -164,6 +165,54 @@ const API = (function () {
       },
     },
 
+    /* ---------- Minha conta (apelido, foto, telefone, senha) ---------- */
+    profile: {
+      async me() {
+        if (!LIVE) return null;
+        const { data: s } = await sb.auth.getSession();
+        const u = s.session && s.session.user;
+        if (!u) return null;
+        const { data } = await sb.from("profiles").select("name,display_name,phone,role,avatar_path").eq("id", u.id).maybeSingle();
+        const p = data || {};
+        const avatarUrl = p.avatar_path ? sb.storage.from("avatars").getPublicUrl(p.avatar_path).data.publicUrl : "";
+        return { id: u.id, email: u.email, name: p.name || "", displayName: p.display_name || "", phone: p.phone || "", role: p.role || "customer", avatarPath: p.avatar_path || "", avatarUrl };
+      },
+      async update({ name, displayName, phone }) {
+        if (!LIVE) return notReady("Salvar perfil");
+        const { data: s } = await sb.auth.getSession();
+        const uid = s.session && s.session.user.id;
+        if (!uid) return { ok: false, message: "Entre na sua conta." };
+        const row = { name: String(name || "").trim(), display_name: String(displayName || "").trim() || null, phone: String(phone || "").trim() || null };
+        const { error } = await sb.from("profiles").update(row).eq("id", uid);
+        return error ? fail(error) : { ok: true };
+      },
+      // `blob` já vem reduzido (JPEG) pela tela; o banco só aceita imagem até 1 MB na pasta do próprio usuário
+      async uploadAvatar(blob) {
+        if (!LIVE) return notReady("Enviar foto");
+        const { data: s } = await sb.auth.getSession();
+        const uid = s.session && s.session.user.id;
+        if (!uid) return { ok: false, message: "Entre na sua conta." };
+        const { data: prev } = await sb.from("profiles").select("avatar_path").eq("id", uid).maybeSingle();
+        const path = `${uid}/avatar-${Date.now()}.jpg`;
+        const up = await sb.storage.from("avatars").upload(path, blob, { contentType: "image/jpeg", upsert: false });
+        if (up.error) return fail(up.error);
+        const { error } = await sb.from("profiles").update({ avatar_path: path }).eq("id", uid);
+        if (error) return fail(error);
+        if (prev && prev.avatar_path) await sb.storage.from("avatars").remove([prev.avatar_path]);
+        return { ok: true };
+      },
+      async removeAvatar() {
+        if (!LIVE) return notReady("Remover foto");
+        const { data: s } = await sb.auth.getSession();
+        const uid = s.session && s.session.user.id;
+        if (!uid) return { ok: false, message: "Entre na sua conta." };
+        const { data: prev } = await sb.from("profiles").select("avatar_path").eq("id", uid).maybeSingle();
+        const { error } = await sb.from("profiles").update({ avatar_path: null }).eq("id", uid);
+        if (error) return fail(error);
+        if (prev && prev.avatar_path) await sb.storage.from("avatars").remove([prev.avatar_path]);
+        return { ok: true };
+      },
+    },
     subscriptions: {
       // O cliente registra a Box que escolheu (sempre "aguardando pagamento"; quem ativa é o dono ou, no futuro, o pagamento)
       async choosePlan(plan) {
@@ -227,7 +276,7 @@ const API = (function () {
       async customers() {
         if (!LIVE) return DEMO_CUSTOMERS.map((c) => withMetrics({ ...c, demo: true }));
         const [p, s, a, b, st, ps] = await Promise.all([
-          sb.from("profiles").select("id,name,email,phone,role"),
+          sb.from("profiles").select("id,name,display_name,email,phone,role"),
           sb.from("subscriptions").select("*").order("created_at", { ascending: false }),
           sb.from("addresses").select("*"),
           sb.from("boxes").select("id,user_id,n,ship_date,status,tracking").order("n"),
